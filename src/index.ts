@@ -10,7 +10,7 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
   const preRender = typeof window === 'undefined';
 
   if (!preRender) {
-    const element = createElement(component);
+    const element = setupElement(component);
 
     return customElements.define(tagName, element);
   }
@@ -31,7 +31,7 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
  *
  * -------------------------------- */
 
-function createElement<T>(component: ComponentFactory<T>): any {
+function setupElement<T>(component: ComponentFactory<T>): any {
   function CustomElement() {
     return Reflect.construct(HTMLElement, [], CustomElement);
   }
