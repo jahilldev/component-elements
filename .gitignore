@@ -1,0 +1,9 @@
+node_modules
+dist
+tests/coverage
+logs/**
+yarn-error.log
+package-lock.json
+node_modules/
+npm-debug.log
+/.nyc_output
