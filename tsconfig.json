@@ -16,6 +16,8 @@
     "importHelpers": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "jsx": "react",
+    "jsxFactory": "h",
     "lib": ["ES2015", "ES2016", "ES2017", "ES2018", "ES2019"],
     "paths": {
       "@/*": ["./src/*"]

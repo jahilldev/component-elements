@@ -31,13 +31,18 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
  *
  * -------------------------------- */
 
-function createElement<T>(component: ComponentFactory<T>): CustomElementConstructor {
-  const element = Object.create(HTMLElement.prototype);
+function createElement<T>(component: ComponentFactory<T>): any {
+  function CustomElement() {
+    return Reflect.construct(HTMLElement, [], CustomElement);
+  }
 
-  element.prototype.connectedCallback = () => console.log('CONNECT!');
-  element.prototype.disconnectedCallback = () => console.log('DISCONNECT!');
+  CustomElement.prototype = Object.create(HTMLElement.prototype);
+  CustomElement.prototype.constructor = CustomElement;
+  CustomElement.prototype.connectedCallback = () => console.log('CONNECT!');
+  // CustomElement.prototype.attributeChangedCallback = attributeChangedCallback;
+  CustomElement.prototype.disconnectedCallback = () => console.log('DISCONNECT!');
 
-  return element;
+  return CustomElement;
 }
 
 /* -----------------------------------
