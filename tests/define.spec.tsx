@@ -3,6 +3,16 @@ import { define } from '@/index';
 
 /* -----------------------------------
  *
+ * Promises
+ *
+ * -------------------------------- */
+
+function flushPromises() {
+  return new Promise((resolve) => setImmediate(resolve));
+}
+
+/* -----------------------------------
+ *
  * Component
  *
  * -------------------------------- */
@@ -34,10 +44,10 @@ describe('define()', () => {
     document.body.removeChild(root);
   });
 
-  it('renders component correctly when from props attribute', () => {
+  it('renders component correctly when from props attribute', async () => {
     const props = { value: 'propsValue' };
 
-    define('message-attribute', Message);
+    define('message-attribute', () => Message);
 
     const element = document.createElement('message-attribute');
 
@@ -50,10 +60,10 @@ describe('define()', () => {
     );
   });
 
-  it('renders component correctly when from json script block', () => {
+  it('renders component correctly when from json script block', async () => {
     const props = { value: 'jsonValue' };
 
-    define('message-script', Message);
+    define('message-script', () => Message);
 
     const element = document.createElement('message-script');
 
@@ -66,12 +76,12 @@ describe('define()', () => {
     );
   });
 
-  it('sets contained HTML as children prop when not server rendered', () => {
+  it('sets contained HTML as children prop when not server rendered', async () => {
     const props = { value: 'childMarkup' };
     const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
     const html = '<p>Lorem ipsum dolor</p><button>Click here</button>';
 
-    define('message-html', Message);
+    define('message-html', () => Message);
 
     const element = document.createElement('message-html');
 
@@ -84,12 +94,12 @@ describe('define()', () => {
     );
   });
 
-  it('does not use contained HTML if server rendered', () => {
+  it('does not use contained HTML if server rendered', async () => {
     const props = { value: 'serverRender' };
     const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
     const html = '<p>Server rendered!</p><button>Click here</button>';
 
-    define('message-server', Message);
+    define('message-server', () => Message);
 
     const element = document.createElement('message-server');
 
@@ -100,6 +110,24 @@ describe('define()', () => {
 
     expect(root.innerHTML).toEqual(
       `<message-server><div><em>${props.value}</em></div></message-server>`
+    );
+  });
+
+  it('renders component asynchronously when provided', async () => {
+    const props = { value: 'asyncValue' };
+
+    define('message-async', () => Promise.resolve(Message));
+
+    const element = document.createElement('message-async');
+
+    element.innerHTML = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
+    root.appendChild(element);
+
+    await flushPromises();
+
+    expect(root.innerHTML).toEqual(
+      `<message-async><div><em>${props.value}</em></div></message-async>`
     );
   });
 });

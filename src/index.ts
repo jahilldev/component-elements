@@ -3,13 +3,31 @@ import Markup from 'preact-markup';
 
 /* -----------------------------------
  *
+ * Types
+ *
+ * -------------------------------- */
+
+type ComponentType<T = {}> = () => ComponentFactory<T> | Promise<ComponentFactory<T>>;
+
+/* -----------------------------------
+ *
  * Element
  *
  * -------------------------------- */
 
 interface CustomElement extends HTMLElement {
-  component: ComponentFactory;
+  component: ComponentType;
 }
+
+/* -----------------------------------
+ *
+ * Guards
+ *
+ * -------------------------------- */
+
+const isPromise = (input: any): input is Promise<any> => {
+  return input && typeof input.then === 'function';
+};
 
 /* -----------------------------------
  *
@@ -17,7 +35,7 @@ interface CustomElement extends HTMLElement {
  *
  * -------------------------------- */
 
-function define<T>(tagName: string, component: ComponentFactory<T>) {
+function define<T>(tagName: string, component: ComponentType<T>) {
   const preRender = typeof window === 'undefined';
 
   if (!preRender) {
@@ -26,13 +44,19 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
     return customElements.define(tagName, element);
   }
 
+  const content = component();
+
+  if (isPromise(content)) {
+    throw new Error('Error: Promises cannot be used for SSR');
+  }
+
   return (props: T) =>
     h(tagName, { server: true }, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
       }),
-      h(component, props),
+      h(content, props),
     ]);
 }
 
@@ -42,7 +66,7 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
  *
  * -------------------------------- */
 
-function setupElement<T>(component: ComponentFactory<T>): any {
+function setupElement<T>(component: ComponentType<T>): any {
   function CustomElement() {
     const element = Reflect.construct(HTMLElement, [], CustomElement);
 
@@ -66,7 +90,7 @@ function setupElement<T>(component: ComponentFactory<T>): any {
  *
  * -------------------------------- */
 
-function onConnected(this: CustomElement) {
+async function onConnected(this: CustomElement) {
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
   const data = JSON.parse(props || json?.innerHTML || '{}');
@@ -74,6 +98,12 @@ function onConnected(this: CustomElement) {
   this.removeAttribute('props');
 
   json?.remove();
+
+  let component = this.component();
+
+  if (isPromise(component)) {
+    component = await component;
+  }
 
   let children;
 
@@ -84,7 +114,7 @@ function onConnected(this: CustomElement) {
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(this.component, { ...data, children }), this);
+  render(h(component, { ...data, children }), this);
 }
 
 /* -----------------------------------
