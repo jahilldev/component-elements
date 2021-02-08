@@ -83,4 +83,23 @@ describe('define()', () => {
       `<message-html><div><em>${props.value}</em>${html}</div></message-html>`
     );
   });
+
+  it('does not use contained HTML if server rendered', () => {
+    const props = { value: 'serverRender' };
+    const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+    const html = '<p>Server rendered!</p><button>Click here</button>';
+
+    define('message-server', Message);
+
+    const element = document.createElement('message-server');
+
+    element.setAttribute('server', '');
+    element.innerHTML = json + html;
+
+    root.appendChild(element);
+
+    expect(root.innerHTML).toEqual(
+      `<message-server><div><em>${props.value}</em></div></message-server>`
+    );
+  });
 });

@@ -27,7 +27,7 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
   }
 
   return (props: T) =>
-    h(tagName, { render: true }, [
+    h(tagName, { server: true }, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
@@ -77,10 +77,11 @@ function onConnected(this: CustomElement) {
 
   let children;
 
-  if (!this.hasAttribute('render')) {
+  if (!this.hasAttribute('server')) {
     children = h(Markup, { markup: this.innerHTML, wrap: false });
   }
 
+  this.removeAttribute('server');
   this.innerHTML = '';
 
   render(h(this.component, { ...data, children }), this);
