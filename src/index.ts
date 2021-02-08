@@ -1,4 +1,5 @@
 import { h, render, ComponentFactory } from 'preact';
+import Markup from 'preact-markup';
 
 /* -----------------------------------
  *
@@ -26,7 +27,7 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
   }
 
   return (props: T) =>
-    h(tagName, {}, [
+    h(tagName, { rendered: true }, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
@@ -66,12 +67,23 @@ function setupElement<T>(component: ComponentFactory<T>): any {
  * -------------------------------- */
 
 function onConnected(this: CustomElement) {
+  const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = JSON.parse(json?.innerHTML || '{}');
+  const data = JSON.parse(props || json?.innerHTML || '{}');
 
-  json.remove();
+  this.removeAttribute('props');
 
-  render(h(this.component, { ...data }), this);
+  json?.remove();
+
+  let children;
+
+  if (!this.hasAttribute('rendered')) {
+    children = h(Markup, { markup: this.innerHTML, wrap: false });
+  }
+
+  this.innerHTML = '';
+
+  render(h(this.component, { ...data, children }), this);
 }
 
 /* -----------------------------------

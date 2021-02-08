@@ -17,13 +17,16 @@
     "clean": "rimraf ./dist",
     "test": "jest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "preact-markup": "^2.1.1"
+  },
   "devDependencies": {
     "eslint": "7.18.0",
     "eslint-config-prettier": "7.1.0",
     "jest": "^26.6.3",
     "npm-run-all": "4.1.5",
     "preact": "^10.5.12",
+    "preact-markup": "^2.1.1",
     "prettier": "2.2.1",
     "rimraf": "3.0.2",
     "ts-jest": "^26.5.0",

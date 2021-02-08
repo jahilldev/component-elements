@@ -3573,6 +3573,11 @@ posix-character-classes@^0.1.0:
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
 
+preact-markup@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/preact-markup/-/preact-markup-2.1.1.tgz#0451e7eed1dac732d7194c34a7f16ff45a2cfdd7"
+  integrity sha512-8JL2p36mzK8XkspOyhBxUSPjYwMxDM0L5BWBZWxsZMVW8WsGQrYQDgVuDKkRspt2hwrle+Cxr/053hpc9BJwfw==
+
 preact@^10.5.12:
   version "10.5.12"
   resolved "https://registry.yarnpkg.com/preact/-/preact-10.5.12.tgz#6a8ee8bf40a695c505df9abebacd924e4dd37704"
