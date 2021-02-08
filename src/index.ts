@@ -2,6 +2,16 @@ import { h, render, ComponentFactory } from 'preact';
 
 /* -----------------------------------
  *
+ * Element
+ *
+ * -------------------------------- */
+
+interface CustomElement extends HTMLElement {
+  component: ComponentFactory;
+}
+
+/* -----------------------------------
+ *
  * Define
  *
  * -------------------------------- */
@@ -33,16 +43,45 @@ function define<T>(tagName: string, component: ComponentFactory<T>) {
 
 function setupElement<T>(component: ComponentFactory<T>): any {
   function CustomElement() {
-    return Reflect.construct(HTMLElement, [], CustomElement);
+    const element = Reflect.construct(HTMLElement, [], CustomElement);
+
+    element.component = component;
+
+    return element;
   }
 
   CustomElement.prototype = Object.create(HTMLElement.prototype);
   CustomElement.prototype.constructor = CustomElement;
-  CustomElement.prototype.connectedCallback = () => console.log('CONNECT!');
+  CustomElement.prototype.connectedCallback = onConnected;
   // CustomElement.prototype.attributeChangedCallback = attributeChangedCallback;
-  CustomElement.prototype.disconnectedCallback = () => console.log('DISCONNECT!');
+  CustomElement.prototype.disconnectedCallback = onDisconnected;
 
   return CustomElement;
+}
+
+/* -----------------------------------
+ *
+ * Connected
+ *
+ * -------------------------------- */
+
+function onConnected(this: CustomElement) {
+  const json = this.querySelector('[type="application/json"]');
+  const data = JSON.parse(json?.innerHTML || '{}');
+
+  json.remove();
+
+  render(h(this.component, { ...data }), this);
+}
+
+/* -----------------------------------
+ *
+ * Disconnected
+ *
+ * -------------------------------- */
+
+function onDisconnected(this: CustomElement) {
+  render(null, this);
 }
 
 /* -----------------------------------

@@ -30,12 +30,18 @@ describe('define()', () => {
   });
 
   it('renders component when defined', () => {
+    const props = { value: 'testValue ' };
+
     define('custom-message', Message);
 
     const element = document.createElement('custom-message');
 
+    element.innerHTML = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
     root.appendChild(element);
 
-    expect(root.innerHTML).toEqual('<custom-message><em></em></custom-message>');
+    expect(root.innerHTML).toEqual(
+      `<custom-message><em>${props.value}</em></custom-message>`
+    );
   });
 });
