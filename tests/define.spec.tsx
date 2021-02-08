@@ -29,9 +29,13 @@ describe('define()', () => {
     document.body.removeChild(root);
   });
 
-  it('returns true', () => {
+  it('renders component when defined', () => {
     define('custom-message', Message);
 
-    expect(true).toBeTruthy();
+    const element = document.createElement('custom-message');
+
+    root.appendChild(element);
+
+    expect(root.innerHTML).toEqual('<custom-message><em></em></custom-message>');
   });
 });
