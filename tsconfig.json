@@ -8,7 +8,7 @@
     "target": "es2018",
     "module": "commonjs",
     "moduleResolution": "node",
-    "sourceMap": true,
+    "sourceMap": false,
     "inlineSourceMap": false,
     "inlineSources": false,
     "experimentalDecorators": true,
@@ -23,5 +23,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "webpack.config.ts", "./src/config.ts"]
+  "exclude": ["node_modules", "webpack.config.ts", "./tests"]
 }
