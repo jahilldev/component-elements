@@ -25,6 +25,5 @@
       "react-dom": ["node_modules/preact/compat"]
     }
   },
-  "include": ["./src"],
-  "exclude": ["node_modules", "webpack.config.ts", "./dist"]
+  "exclude": ["node_modules", "webpack.config.ts", "./dist", "./tests"]
 }
