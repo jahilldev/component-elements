@@ -161,13 +161,17 @@ describe('define()', () => {
     });
 
     it('returns the correct markup', () => {
-      const props = { value: 'asyncValue' };
-
+      const props = { value: 'serverValue' };
       const component = define('message-server', () => Message);
+
       const instance = mount(h(component, props));
 
       expect(instance.find('message-server').length).toEqual(1);
       expect(instance.find('em').text()).toEqual(props.value);
+    });
+
+    it('throws an error when used with a promise', () => {
+      expect(() => define('message-error', () => Promise.resolve(Message))).toThrow();
     });
   });
 });

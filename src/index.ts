@@ -50,7 +50,7 @@ function define<P = {}>(
   const content = component();
 
   if (isPromise(content)) {
-    throw new Error('Error: Promises cannot be used for SSR');
+    throw new Error('Error: Promises cannot be used for preactement SSR');
   }
 
   return (props: P) =>
