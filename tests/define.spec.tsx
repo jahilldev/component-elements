@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h, JSX } from 'preact';
 import { mount } from 'enzyme';
 import { define } from '../src/index';
 
@@ -19,6 +19,7 @@ function flushPromises() {
  * -------------------------------- */
 
 interface IProps {
+  attributes?: JSX.HTMLAttributes;
   value: string;
   children?: any;
 }
@@ -29,9 +30,10 @@ interface IProps {
  *
  * -------------------------------- */
 
-function Message({ value, children }: IProps) {
+function Message({ attributes, value, children }: IProps) {
   return (
     <div>
+      {attributes.title && <h3>{attributes.title}</h3>}
       <em>{value}</em>
       {children}
     </div>
@@ -145,6 +147,25 @@ describe('define()', () => {
 
       expect(root.innerHTML).toEqual(
         `<message-async><div><em>${props.value}</em></div></message-async>`
+      );
+    });
+
+    it('passes all element attributes to component via "props.attributes"', () => {
+      const testTitle = 'testTitle';
+      const props = { value: 'asyncValue' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
+      define('message-attrs', () => Message);
+
+      const element = document.createElement('message-attrs');
+
+      element.setAttribute('title', testTitle);
+      element.innerHTML = json;
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toEqual(
+        `<message-attrs title="${testTitle}"><div><h3>${testTitle}</h3><em>${props.value}</em></div></message-attrs>`
       );
     });
   });

@@ -56,7 +56,7 @@ function define<P = {}>(tagName: string, child: ComponentType<P>): FunctionCompo
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
       }),
-      h(content, props),
+      h(content, { ...props, attributes: {} }),
     ]);
 }
 
@@ -91,9 +91,10 @@ function setupElement<T>(component: ComponentType<T>): any {
  * -------------------------------- */
 
 async function onConnected(this: CustomElement) {
+  const attributes = getElementAttributes(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = JSON.parse(props || json?.innerHTML || '{}');
+  const data = JSON.parse(props || json.innerHTML || '{}');
 
   this.removeAttribute('props');
 
@@ -114,7 +115,7 @@ async function onConnected(this: CustomElement) {
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(component, { ...data, children }), this);
+  render(h(component, { ...data, attributes, children }), this);
 }
 
 /* -----------------------------------
@@ -125,6 +126,32 @@ async function onConnected(this: CustomElement) {
 
 function onDisconnected(this: CustomElement) {
   render(null, this);
+}
+
+/* -----------------------------------
+ *
+ * Attributes
+ *
+ * -------------------------------- */
+
+function getElementAttributes(element: CustomElement) {
+  const exclude = ['props', 'server'];
+
+  const result = {};
+
+  if (!element.hasAttributes()) {
+    return result;
+  }
+
+  for (var i = element.attributes.length - 1; i >= 0; i--) {
+    const item = element.attributes[i];
+
+    if (exclude.indexOf(item.name) === -1) {
+      result[item.name] = item.value;
+    }
+  }
+
+  return result;
 }
 
 /* -----------------------------------
