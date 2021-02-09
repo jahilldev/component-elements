@@ -21,6 +21,9 @@
     "preact-markup": "^2.1.1"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.10.8",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-preact-pure": "^3.0.0",
     "eslint": "7.18.0",
     "eslint-config-prettier": "7.1.0",
     "jest": "^26.6.3",

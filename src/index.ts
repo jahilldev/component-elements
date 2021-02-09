@@ -1,4 +1,4 @@
-import { h, render, ComponentFactory } from 'preact';
+import { h, render, ComponentFactory, FunctionComponent } from 'preact';
 import Markup from 'preact-markup';
 
 /* -----------------------------------
@@ -7,7 +7,7 @@ import Markup from 'preact-markup';
  *
  * -------------------------------- */
 
-type ComponentType<T = {}> = () => ComponentFactory<T> | Promise<ComponentFactory<T>>;
+type ComponentType<P = {}> = () => ComponentFactory<P> | Promise<ComponentFactory<P>>;
 
 /* -----------------------------------
  *
@@ -35,13 +35,16 @@ const isPromise = (input: any): input is Promise<any> => {
  *
  * -------------------------------- */
 
-function define<T>(tagName: string, component: ComponentType<T>) {
+function define<P = {}>(
+  tagName: string,
+  component: ComponentType<P>
+): FunctionComponent<P> {
   const preRender = typeof window === 'undefined';
 
   if (!preRender) {
-    const element = setupElement(component);
+    customElements.define(tagName, setupElement(component));
 
-    return customElements.define(tagName, element);
+    return;
   }
 
   const content = component();
@@ -50,7 +53,7 @@ function define<T>(tagName: string, component: ComponentType<T>) {
     throw new Error('Error: Promises cannot be used for SSR');
   }
 
-  return (props: T) =>
+  return (props: P) =>
     h(tagName, { server: true }, [
       h('script', {
         type: 'application/json',

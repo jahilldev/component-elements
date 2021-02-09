@@ -20,8 +20,10 @@
     "jsxFactory": "h",
     "lib": ["ES2015", "ES2016", "ES2017", "ES2018", "ES2019"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "react": ["node_modules/preact/compat"],
+      "react-dom": ["node_modules/preact/compat"]
     }
   },
-  "exclude": ["node_modules", "webpack.config.ts", "./tests"]
+  "exclude": ["node_modules", "webpack.config.ts"]
 }

@@ -1,0 +1,9 @@
+{
+   "editor.formatOnSave": true,
+   "prettier.requireConfig": true,
+   "editor.tabSize": 3,
+   "editor.semanticHighlighting.enabled": false,
+   "editor.codeActionsOnSave": {
+      "source.fixAll.tslint": true
+   }
+}
