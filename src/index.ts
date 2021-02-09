@@ -35,19 +35,16 @@ const isPromise = (input: any): input is Promise<any> => {
  *
  * -------------------------------- */
 
-function define<P = {}>(
-  tagName: string,
-  component: ComponentType<P>
-): FunctionComponent<P> {
+function define<P = {}>(tagName: string, child: ComponentType<P>): FunctionComponent<P> {
   const preRender = typeof window === 'undefined';
 
   if (!preRender) {
-    customElements.define(tagName, setupElement(component));
+    customElements.define(tagName, setupElement(child));
 
     return;
   }
 
-  const content = component();
+  const content = child();
 
   if (isPromise(content)) {
     throw new Error('Error: Promises cannot be used for preactement SSR');
