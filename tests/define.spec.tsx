@@ -173,5 +173,14 @@ describe('define()', () => {
     it('throws an error when used with a promise', () => {
       expect(() => define('message-error', () => Promise.resolve(Message))).toThrow();
     });
+
+    it('includes a json script block with props', () => {
+      const props = { value: 'serverValue' };
+      const component = define('message-server', () => Message);
+
+      const instance = mount(h(component, props));
+
+      expect(instance.find('script').text()).toEqual(JSON.stringify(props));
+    });
   });
 });
