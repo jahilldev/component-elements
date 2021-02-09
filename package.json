@@ -1,9 +1,9 @@
 {
-  "name": "preactify-element",
+  "name": "preactement",
   "version": "1.0.0",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "repository": "git@github.com:jhukdev/preactify-element.git",
+  "repository": "git@github.com:jhukdev/preactement.git",
   "author": "James Hill <contact@jameshill.dev>",
   "license": "MIT",
   "private": false,
