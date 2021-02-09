@@ -1,4 +1,4 @@
-# preactify-element
+# preactement
 
 Sometimes, it's useful to let the DOM render our components when needed. Custom Elements are great at this. They provide various methods that can inform you when an element is "connected" or "disconnected" from the DOM.
 
@@ -9,18 +9,18 @@ This package provides the ability to use an HTML custom element as the root for 
 Install with Yarn:
 
 ```bash
-$ yarn add preactify-element
+$ yarn add preactement
 ```
 
 Install with NPM:
 
 ```bash
-$ npm i preactify-element
+$ npm i preactement
 ```
 
 # Use Cases
 
-The following are a few situations where `preactify-element` might come in handy. I'm sure there are others, but these were useful to me.
+The following are a few situations where `preactement` might come in handy. I'm sure there are others, but these were useful to me.
 
 TBD
 
