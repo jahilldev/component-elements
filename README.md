@@ -55,7 +55,7 @@ define('hero-banner', () => import('./heroBanner'));
 
 As the `heroBanner.ts` file is exporting the component as a key, e.g `export { HeroBanner };`, and this matches the tag name in snake case, e.g `hero-banner`, the component will be correctly rendered.
 
-## SSR
+## On the server (SSR)
 
 You can also use `define()` to generate a custom element container if you're rendering your page in Node. When wrapping your component, e.g:
 
@@ -116,6 +116,26 @@ define('hero-banner', () => HeroBanner, ['title-text']);
 ```
 
 These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
+
+## Nested HTML
+
+You can also provide nested HTML to your components `children` property. For example:
+
+```html
+<hero-banner>
+  <h2>Banner Title</h2>
+</hero-banner>
+```
+
+This will correctly convert the `<h2>` into virtual DOM nodes for use in your component, e.g:
+
+```tsx
+/*[...]*/
+
+function HeroBanner({ children }) {
+  return <section>{children}</section>;
+}
+```
 
 # Acknowledgement
 
