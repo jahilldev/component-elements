@@ -16,7 +16,8 @@ type ComponentType<P = {}> = () => ComponentFactory<P> | Promise<ComponentFactor
  * -------------------------------- */
 
 interface CustomElement extends HTMLElement {
-  component: ComponentType;
+  __component: ComponentType;
+  __attributes: string[];
 }
 
 /* -----------------------------------
@@ -35,11 +36,15 @@ const isPromise = (input: any): input is Promise<any> => {
  *
  * -------------------------------- */
 
-function define<P = {}>(tagName: string, child: ComponentType<P>): FunctionComponent<P> {
+function define<P = {}>(
+  tagName: string,
+  child: ComponentType<P>,
+  attributes: string[] = []
+): FunctionComponent<P> {
   const preRender = typeof window === 'undefined';
 
   if (!preRender) {
-    customElements.define(tagName, setupElement(child));
+    customElements.define(tagName, setupElement(child, attributes));
 
     return;
   }
@@ -66,11 +71,12 @@ function define<P = {}>(tagName: string, child: ComponentType<P>): FunctionCompo
  *
  * -------------------------------- */
 
-function setupElement<T>(component: ComponentType<T>): any {
+function setupElement<T>(component: ComponentType<T>, attributes: string[]): any {
   function CustomElement() {
     const element = Reflect.construct(HTMLElement, [], CustomElement);
 
-    element.component = component;
+    element.__component = component;
+    element.__attributes = attributes;
 
     return element;
   }
@@ -100,7 +106,7 @@ async function onConnected(this: CustomElement) {
 
   json?.remove();
 
-  let component = this.component();
+  let component = this.__component();
 
   if (isPromise(component)) {
     component = await component;
@@ -115,7 +121,7 @@ async function onConnected(this: CustomElement) {
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(component, { ...data, attributes, children }), this);
+  render(h(component, { ...data, ...attributes, children }), this);
 }
 
 /* -----------------------------------
@@ -135,8 +141,6 @@ function onDisconnected(this: CustomElement) {
  * -------------------------------- */
 
 function getElementAttributes(element: CustomElement) {
-  const exclude = ['props', 'server'];
-
   const result = {};
 
   if (!element.hasAttributes()) {
@@ -146,8 +150,12 @@ function getElementAttributes(element: CustomElement) {
   for (var i = element.attributes.length - 1; i >= 0; i--) {
     const item = element.attributes[i];
 
-    if (exclude.indexOf(item.name) === -1) {
-      result[item.name] = item.value;
+    if (element.__attributes.indexOf(item.name) > -1) {
+      const key = item.name.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
+
+      result[key] = item.value;
+
+      element.removeAttribute(item.name);
     }
   }
 
