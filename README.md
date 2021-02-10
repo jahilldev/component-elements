@@ -85,7 +85,7 @@ function HomePage() {
 
 ## Properties
 
-If you're not running `preactement` on the server, you have several ways of providing defining props for your component.
+If you're not running `preactement` on the server, you have several ways of defining props for your component.
 
 ### 1. Nested block of JSON:
 
