@@ -117,33 +117,6 @@ define('hero-banner', () => HeroBanner, ['title-text']);
 
 These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
 
-# Use Cases
-
-The following are a few situations where `preactement` might come in handy. I'm sure there are others, but these were useful to me.
-
-## Integration with other frameworks
-
-If you're using something other than Node to render your HTML pages, you might want an easy method of integrating Preact into your project. Preact is a great fit for controlling the more interactive elements on your site given it's small size. With `preactement` you can do the following:
-
-Say we have a Preact component, `LoginForm`, first we'll render a custom element on our page:
-
-```html
-<login-form></login-form>
-```
-
-Now that we have a container, we need to include the Preact component in our code. In your "entry" file, or the source that produces the JS file to run on your page, we "define" a custom element using our Preact component:
-
-```typescript
-import { define } from 'preactement';
-import { LoginForm } from './loginForm';
-
-/*[...]*/
-
-define('login-form', () => LoginForm);
-```
-
-When this runs, whenever the custom element is present in the DOM, `preactement` will render our component within.
-
 # Acknowledgement
 
 This function takes _heavy_ inspiration from the excellent [preact-custom-element](https://github.com/preactjs/preact-custom-element). That library served as a starting point for this package, and all of the Preact guys deserve a massive dose of gratitude. I had slightly different needs, so decided to build this as part solution, part learning excersize.
