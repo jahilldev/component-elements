@@ -47,6 +47,8 @@ function Message({ customTitle, value, children }: IProps) {
  * -------------------------------- */
 
 describe('define()', () => {
+  const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
   describe('when run in the browser', () => {
     let root;
 
@@ -148,14 +150,33 @@ describe('define()', () => {
       );
     });
 
+    it('tries to infer the component if not explicitly returned', async () => {
+      const props = { value: 'inferValue' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
+      define('message-six', () => Promise.resolve({ MessageSix: Message }));
+
+      const element = document.createElement('message-six');
+
+      element.innerHTML = json;
+
+      root.appendChild(element);
+
+      await flushPromises();
+
+      expect(root.innerHTML).toEqual(
+        `<message-six><div><em>${props.value}</em></div></message-six>`
+      );
+    });
+
     it('merges defined attributes in array with component props', () => {
       const customTitle = 'customTitle';
       const props = { value: 'attrProps' };
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
 
-      define('message-six', () => Message, ['custom-title']);
+      define('message-seven', () => Message, ['custom-title']);
 
-      const element = document.createElement('message-six');
+      const element = document.createElement('message-seven');
 
       element.setAttribute('custom-title', customTitle);
       element.innerHTML = json;
@@ -163,8 +184,21 @@ describe('define()', () => {
       root.appendChild(element);
 
       expect(root.innerHTML).toEqual(
-        `<message-six><div><h2>${customTitle}</h2><em>${props.value}</em></div></message-six>`
+        `<message-seven><div><h2>${customTitle}</h2><em>${props.value}</em></div></message-seven>`
       );
+    });
+
+    it('errors if component cannot be found in function', async () => {
+      define('message-eight', () => Promise.resolve({ Message }));
+
+      const element = document.createElement('message-eight');
+
+      root.appendChild(element);
+
+      await flushPromises();
+
+      expect(errorSpy).toBeCalled();
+      expect(element.innerHTML).toEqual('');
     });
   });
 
@@ -181,21 +215,21 @@ describe('define()', () => {
 
     it('returns the correct markup', () => {
       const props = { value: 'serverValue' };
-      const component = define('message-eight', () => Message);
+      const component = define('message-one', () => Message);
 
       const instance = mount(h(component, props));
 
-      expect(instance.find('message-eight').length).toEqual(1);
+      expect(instance.find('message-one').length).toEqual(1);
       expect(instance.find('em').text()).toEqual(props.value);
     });
 
     it('throws an error when used with a promise', () => {
-      expect(() => define('message-nine', () => Promise.resolve(Message))).toThrow();
+      expect(() => define('message-two', () => Promise.resolve(Message))).toThrow();
     });
 
     it('includes a json script block with props', () => {
       const props = { value: 'serverValue' };
-      const component = define('message-ten', () => Message);
+      const component = define('message-three', () => Message);
 
       const instance = mount(h(component, props));
 

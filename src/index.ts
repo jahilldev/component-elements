@@ -1,4 +1,4 @@
-import { h, render, ComponentFactory, FunctionComponent } from 'preact';
+import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
 import Markup from 'preact-markup';
 
 /* -----------------------------------
@@ -7,7 +7,11 @@ import Markup from 'preact-markup';
  *
  * -------------------------------- */
 
-type ComponentType<P = {}> = () => ComponentFactory<P> | Promise<ComponentFactory<P>>;
+type ComponentFunction<P = {}> = () => ComponentResult<P>;
+type ComponentResult<P = {}> = ComponentFactory<P> | ComponentAsync<P>;
+type ComponentAsync<P = {}> =
+  | Promise<ComponentFactory<P>>
+  | Promise<{ [index: string]: ComponentFactory<P> }>;
 
 /* -----------------------------------
  *
@@ -16,7 +20,7 @@ type ComponentType<P = {}> = () => ComponentFactory<P> | Promise<ComponentFactor
  * -------------------------------- */
 
 interface CustomElement extends HTMLElement {
-  __component: ComponentType;
+  __component: ComponentFunction;
   __attributes: string[];
 }
 
@@ -38,7 +42,7 @@ const isPromise = (input: any): input is Promise<any> => {
 
 function define<P = {}>(
   tagName: string,
-  child: ComponentType<P>,
+  child: ComponentFunction<P>,
   attributes: string[] = []
 ): FunctionComponent<P> {
   const preRender = typeof window === 'undefined';
@@ -61,7 +65,7 @@ function define<P = {}>(
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
       }),
-      h(content, { ...props, attributes: {} }),
+      h(content, props),
     ]);
 }
 
@@ -71,7 +75,7 @@ function define<P = {}>(
  *
  * -------------------------------- */
 
-function setupElement<T>(component: ComponentType<T>, attributes: string[]): any {
+function setupElement<T>(component: ComponentFunction<T>, attributes: string[]): any {
   function CustomElement() {
     const element = Reflect.construct(HTMLElement, [], CustomElement);
 
@@ -100,16 +104,25 @@ async function onConnected(this: CustomElement) {
   const attributes = getElementAttributes(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = JSON.parse(props || json.innerHTML || '{}');
+  const data = JSON.parse(props || json?.innerHTML || '{}');
 
   this.removeAttribute('props');
 
   json?.remove();
 
-  let component = this.__component();
+  let response = this.__component();
+  let component: ComponentType;
 
-  if (isPromise(component)) {
-    component = await component;
+  if (isPromise(response)) {
+    component = await getAsyncComponent(response, this.tagName);
+  } else {
+    component = response;
+  }
+
+  if (!component) {
+    console.error('Error: Cannot find component in provided function');
+
+    return;
   }
 
   let children;
@@ -150,16 +163,52 @@ function getElementAttributes(element: CustomElement) {
   for (var i = element.attributes.length - 1; i >= 0; i--) {
     const item = element.attributes[i];
 
-    if (element.__attributes.indexOf(item.name) > -1) {
-      const key = item.name.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
-
-      result[key] = item.value;
-
-      element.removeAttribute(item.name);
+    if (element.__attributes.indexOf(item.name) === -1) {
+      continue;
     }
+
+    const key = item.name.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
+
+    result[key] = item.value;
+
+    element.removeAttribute(item.name);
   }
 
   return result;
+}
+
+/* -----------------------------------
+ *
+ * Component
+ *
+ * -------------------------------- */
+
+async function getAsyncComponent(component: ComponentResult, tagName: string) {
+  let result: ComponentFactory;
+
+  const response = await component;
+
+  if (typeof response === 'function') {
+    return response;
+  }
+
+  if (typeof response === 'object') {
+    result = response[getNameFromTag(tagName)] || void 0;
+  }
+
+  return result;
+}
+
+/* -----------------------------------
+ *
+ * Classname
+ *
+ * -------------------------------- */
+
+function getNameFromTag(value: string) {
+  value = value.toLowerCase();
+
+  return value.replace(/(^\w|-\w)/g, (item) => item.replace(/-/, '').toUpperCase());
 }
 
 /* -----------------------------------
