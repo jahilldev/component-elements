@@ -4,31 +4,24 @@ import * as path from 'path';
 
 /* -----------------------------------
  *
- * Flags
- *
- * -------------------------------- */
-
-const RELEASE = process.env.NODE_ENV === 'production';
-
-/* -----------------------------------
- *
  * Config
  *
  * -------------------------------- */
 
-const config: Configuration = {
+const config = ({ mode }): Configuration => ({
   entry: {
     index: path.join(__dirname, './src/index.ts'),
   },
-  mode: RELEASE ? 'production' : 'development',
-  target: 'web',
+  mode: mode || 'development',
+  target: 'node',
   externals: [nodeExternals()],
-  devtool: !RELEASE ? 'eval-source-map' : void 0,
+  devtool: mode === 'development' ? 'eval-source-map' : void 0,
   context: path.join(__dirname, `./src`),
-  cache: !RELEASE,
+  cache: mode === 'development',
   output: {
     path: path.join(__dirname, './dist'),
     filename: '[name].js',
+    libraryTarget: 'umd',
   },
   resolve: {
     extensions: ['.ts', '.tsx', 'json'],
@@ -53,18 +46,18 @@ const config: Configuration = {
     ],
   },
   performance: {
-    hints: !RELEASE ? 'warning' : void 0,
+    hints: mode === 'development' ? 'warning' : void 0,
   },
   plugins: [
     new DefinePlugin({
-      __DEV__: !RELEASE,
+      __DEV__: mode === 'development',
     }),
   ],
   stats: {
     colors: true,
     timings: true,
   },
-};
+});
 
 /* -----------------------------------
  *
@@ -72,4 +65,4 @@ const config: Configuration = {
  *
  * -------------------------------- */
 
-export default config;
+module.exports = config;

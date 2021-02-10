@@ -15,6 +15,17 @@ type ComponentAsync<P = {}> =
 
 /* -----------------------------------
  *
+ * Errors
+ *
+ * -------------------------------- */
+
+enum ErrorTypes {
+  Promise = 'Error: Promises cannot be used for preactement SSR',
+  Missing = 'Error: Cannot find component in provided function',
+}
+
+/* -----------------------------------
+ *
  * Element
  *
  * -------------------------------- */
@@ -56,7 +67,7 @@ function define<P = {}>(
   const content = child();
 
   if (isPromise(content)) {
-    throw new Error('Error: Promises cannot be used for preactement SSR');
+    throw new Error(ErrorTypes.Promise);
   }
 
   return (props: P) =>
@@ -120,7 +131,7 @@ async function onConnected(this: CustomElement) {
   }
 
   if (!component) {
-    console.error('Error: Cannot find component in provided function');
+    console.error(ErrorTypes.Missing);
 
     return;
   }
