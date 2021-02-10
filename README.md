@@ -20,9 +20,11 @@ $ npm i preactement
 
 # Using define()
 
-`preactement` exports one function, `define()`. This allows us to register a custom element via a provided key, and provide the component we'd like to render within.
+`preactement` exports one function, `define()`. This allows us to register a custom element via a provided key, and provide the component we'd like to render within. It can also generate a custom element with props ready for hydration if run on the server
 
-For example:
+# In the browser
+
+In order to register and render a component, you'll need to call `define()` with your chosen component, e.g:
 
 ```tsx
 import { define } from 'preactement';
@@ -52,6 +54,68 @@ define('hero-banner', () => import('./heroBanner'));
 ```
 
 As the `heroBanner.ts` file is exporting the component as a key, e.g `export { HeroBanner };`, and this matches the tag name in snake case, e.g `hero-banner`, the component will be correctly rendered.
+
+## SSR
+
+You can also use `define()` to generate a custom element container if you're rendering your page in Node. When wrapping your component, e.g:
+
+```ts
+define('hero-banner', HeroBanner);
+```
+
+A functional component is returned that you can include elsewhere in your app. For example:
+
+```tsx
+import { define } from 'preactement';
+
+/*[...]*/
+
+const Component = define('hero-banner', HeroBanner);
+
+/*[...]*/
+
+function HomePage() {
+  return (
+    <main>
+      <Component />
+    </main>
+  );
+}
+```
+
+## Properties
+
+If you're not running `preactement` on the server, you have several ways of providing defining props for your component.
+
+### 1. Nested block of JSON:
+
+```html
+<hero-banner>
+  <script type="application/json">
+    { "titleText": "Hero Banner Title" }
+  </script>
+</hero-banner>
+```
+
+### 2. A `props` attribute (this must be an encoded JSON string)
+
+```html
+<hero-banner props="{'titleText': 'Hero Banner Title'}"></hero-banner>
+```
+
+### 3. Custom attributes
+
+```html
+<hero-banner title-text="Hero Banner Title"></hero-banner>
+```
+
+You'll need to define your custom attributes up front when using `define()`, e.g:
+
+```ts
+define('hero-banner', () => HeroBanner, ['title-text']);
+```
+
+These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
 
 # Use Cases
 
