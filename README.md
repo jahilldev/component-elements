@@ -60,7 +60,7 @@ As the `heroBanner.ts` file is exporting the component as a key, e.g `export { H
 You can also use `define()` to generate a custom element container if you're rendering your page in Node. When wrapping your component, e.g:
 
 ```ts
-define('hero-banner', HeroBanner);
+define('hero-banner', () => HeroBanner);
 ```
 
 A functional component is returned that you can include elsewhere in your app. For example:
@@ -70,7 +70,7 @@ import { define } from 'preactement';
 
 /*[...]*/
 
-const Component = define('hero-banner', HeroBanner);
+const Component = define('hero-banner', () => HeroBanner);
 
 /*[...]*/
 
