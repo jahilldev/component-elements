@@ -35,15 +35,17 @@ import { HeroBanner } from './heroBanner';
 define('hero-banner', () => HeroBanner);
 ```
 
-This registers `<hero-banner>` as a custom element. When that element exists on the page, `preactement` will render our component. If the custom element isn't present immediately, e.g it's created dynamically at some point in the future, we can provide an async function:
+This registers `<hero-banner>` as a custom element. When that element exists on the page, `preactement` will render our component.
+
+If the custom element isn't present immediately, e.g it's created dynamically at some point in the future, we can provide an async function that explicitly resolves your component:
 
 ```tsx
-define('hero-banner', () => import('./heroBanner').then(({ HeroBanner }) => HeroBanner));
+define('hero-banner', () => Promise.resolve(HeroBanner));
 ```
 
 This allows us to reduce the overall code in our bundle, and load the required component on demand when needed.
 
-You can either explicitly resolve the component from your async function, as seen above, _or_ `preactement` will try to infer the export key based on the provided tag name. For example:
+You can either resolve the component from your async function, as seen above, _or_ `preactement` will try to infer the export key based on the provided tag name. For example:
 
 ```tsx
 import { define } from 'preactement';
