@@ -88,14 +88,14 @@ function define<P = {}>(
 
 function setupElement<T>(component: ComponentFunction<T>, attributes: string[]): any {
   if (typeof Reflect !== 'undefined' && Reflect.construct) {
-    function CustomElement() {
+    const CustomElement = function () {
       const element = Reflect.construct(HTMLElement, [], CustomElement);
 
       element.__component = component;
       element.__attributes = attributes;
 
       return element;
-    }
+    };
 
     CustomElement.prototype = Object.create(HTMLElement.prototype);
     CustomElement.prototype.constructor = CustomElement;
