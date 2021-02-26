@@ -1,11 +1,4 @@
-import {
-  h,
-  render,
-  ComponentFactory,
-  FunctionComponent,
-  ComponentType,
-  ComponentChildren,
-} from 'preact';
+import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
 import Markup from 'preact-markup';
 
 /* -----------------------------------
