@@ -31,8 +31,6 @@ interface IProps {
  * -------------------------------- */
 
 function Message({ customTitle, value, children }: IProps) {
-  console.log('children', children);
-
   return (
     <Fragment>
       {customTitle && <h2>{customTitle}</h2>}
@@ -212,6 +210,8 @@ describe('define()', () => {
       );
 
       element.setAttribute('custom-title', '');
+
+      expect(root.innerHTML).toEqual(`<message-nine><em>${props.value}</em></message-nine>`);
     });
   });
 
