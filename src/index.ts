@@ -87,22 +87,36 @@ function define<P = {}>(
  * -------------------------------- */
 
 function setupElement<T>(component: ComponentFunction<T>, attributes: string[]): any {
-  function CustomElement() {
-    const element = Reflect.construct(HTMLElement, [], CustomElement);
+  if (typeof Reflect !== 'undefined' && Reflect.construct) {
+    function CustomElement() {
+      const element = Reflect.construct(HTMLElement, [], CustomElement);
 
-    element.__component = component;
-    element.__attributes = attributes;
+      element.__component = component;
+      element.__attributes = attributes;
 
-    return element;
+      return element;
+    }
+
+    CustomElement.prototype = Object.create(HTMLElement.prototype);
+    CustomElement.prototype.constructor = CustomElement;
+    CustomElement.prototype.connectedCallback = onConnected;
+    CustomElement.prototype.disconnectedCallback = onDisconnected;
+
+    return CustomElement;
   }
 
-  CustomElement.prototype = Object.create(HTMLElement.prototype);
-  CustomElement.prototype.constructor = CustomElement;
-  CustomElement.prototype.connectedCallback = onConnected;
-  // CustomElement.prototype.attributeChangedCallback = attributeChangedCallback;
-  CustomElement.prototype.disconnectedCallback = onDisconnected;
+  return class CustomElement extends HTMLElement {
+    __component = component;
+    __attributes = attributes;
 
-  return CustomElement;
+    public connectedCallback() {
+      onConnected.call(this);
+    }
+
+    public disconnectedCallback() {
+      onDisconnected.call(this);
+    }
+  };
 }
 
 /* -----------------------------------
