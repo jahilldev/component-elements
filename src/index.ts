@@ -1,4 +1,11 @@
-import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
+import {
+  h,
+  render,
+  ComponentFactory,
+  FunctionComponent,
+  ComponentType,
+  ComponentChildren,
+} from 'preact';
 import Markup from 'preact-markup';
 
 /* -----------------------------------
@@ -33,6 +40,9 @@ enum ErrorTypes {
 interface CustomElement extends HTMLElement {
   __component: ComponentFunction;
   __attributes: string[];
+  __properties?: object;
+  __instance?: ComponentType<any>;
+  __children?: any[];
 }
 
 /* -----------------------------------
@@ -93,6 +103,8 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
 
       element.__component = component;
       element.__attributes = attributes;
+      element.__properties = {};
+      element.__children = [];
 
       return element;
     };
@@ -111,6 +123,8 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
   return class CustomElement extends HTMLElement {
     __component = component;
     __attributes = attributes;
+    __properties = {};
+    __children = [];
 
     observedAttributes = attributes;
 
@@ -165,6 +179,10 @@ async function onConnected(this: CustomElement) {
     children = h(Markup, { markup: this.innerHTML, wrap: false });
   }
 
+  this.__properties = { ...data, ...attributes };
+  this.__instance = component;
+  this.__children = children || [];
+
   this.removeAttribute('server');
   this.innerHTML = '';
 
@@ -177,8 +195,15 @@ async function onConnected(this: CustomElement) {
  *
  * -------------------------------- */
 
-function onAttributeChange() {
-  // TBD
+function onAttributeChange(this: CustomElement, name: string, original: string, updated: string) {
+  updated = updated == null ? undefined : updated;
+
+  const props = this.__properties;
+  const children = this.__children;
+
+  props[getPropKey(name)] = updated;
+
+  render(h(this.__instance, { ...props }), this);
 }
 
 /* -----------------------------------
@@ -211,9 +236,7 @@ function getElementAttributes(element: CustomElement) {
       continue;
     }
 
-    const key = item.name.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
-
-    result[key] = item.value;
+    result[getPropKey(item.name)] = item.value;
 
     element.removeAttribute(item.name);
   }
@@ -245,7 +268,17 @@ async function getAsyncComponent(component: ComponentResult, tagName: string) {
 
 /* -----------------------------------
  *
- * Classname
+ * Attribute
+ *
+ * -------------------------------- */
+
+function getPropKey(value: string) {
+  return value.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
+}
+
+/* -----------------------------------
+ *
+ * Tag
  *
  * -------------------------------- */
 
