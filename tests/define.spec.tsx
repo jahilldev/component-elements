@@ -218,7 +218,7 @@ describe('define()', () => {
     });
   });
 
-  describe('when run in a browser (no "Reflect.construct")', () => {
+  describe('when run in the browser (no "Reflect.construct")', () => {
     const { Reflect } = global;
     let root;
 
