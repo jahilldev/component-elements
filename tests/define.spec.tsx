@@ -218,6 +218,54 @@ describe('define()', () => {
     });
   });
 
+  describe('when run in a browser (no "Reflect.construct")', () => {
+    const { Reflect } = global;
+    let root;
+
+    beforeAll(() => {
+      delete global.Reflect;
+    });
+
+    beforeEach(() => {
+      root = document.createElement('div');
+      document.body.appendChild(root);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(root);
+    });
+
+    afterAll(() => {
+      global.Reflect = Reflect;
+    });
+
+    it('renders component correctly', () => {
+      const customTitle = 'customTitle';
+      const props = { value: 'attrUpdate' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+      const html = '<button>Click here</button>';
+
+      define('message-class', () => Message, ['custom-title']);
+
+      const element = document.createElement('message-class');
+
+      element.setAttribute('custom-title', customTitle);
+      element.innerHTML = json + html;
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toEqual(
+        `<message-class><h2>${customTitle}</h2><em>${props.value}</em>${html}</message-class>`
+      );
+
+      element.setAttribute('custom-title', '');
+
+      expect(root.innerHTML).toEqual(
+        `<message-class><em>${props.value}</em>${html}</message-class>`
+      );
+    });
+  });
+
   describe('when run on the server', () => {
     const { window } = global;
 
