@@ -38,6 +38,7 @@ enum ErrorTypes {
  * -------------------------------- */
 
 interface CustomElement extends HTMLElement {
+  __mounted: boolean;
   __component: ComponentFunction;
   __attributes: string[];
   __properties?: object;
@@ -101,6 +102,7 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
     const CustomElement = function () {
       const element = Reflect.construct(HTMLElement, [], CustomElement);
 
+      element.__mounted = false;
       element.__component = component;
       element.__attributes = attributes;
       element.__properties = {};
@@ -121,6 +123,7 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
   }
 
   return class CustomElement extends HTMLElement {
+    __mounted = false;
     __component = component;
     __attributes = attributes;
     __properties = {};
@@ -182,6 +185,7 @@ async function onConnected(this: CustomElement) {
   this.__properties = { ...data, ...attributes };
   this.__instance = component;
   this.__children = children || [];
+  this.__mounted = true;
 
   this.removeAttribute('server');
   this.innerHTML = '';
@@ -196,14 +200,19 @@ async function onConnected(this: CustomElement) {
  * -------------------------------- */
 
 function onAttributeChange(this: CustomElement, name: string, original: string, updated: string) {
+  if (!this.__mounted) {
+    return;
+  }
+
   updated = updated == null ? undefined : updated;
 
   const props = this.__properties;
-  const children = this.__children;
 
   props[getPropKey(name)] = updated;
 
-  render(h(this.__instance, { ...props }), this);
+  this.removeAttribute(name);
+
+  render(h(this.__instance, { ...props, children: this.__children }), this);
 }
 
 /* -----------------------------------
