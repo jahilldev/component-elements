@@ -129,14 +129,14 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
     __properties = {};
     __children = [];
 
-    observedAttributes = attributes;
+    static observedAttributes = attributes;
 
     public connectedCallback() {
       onConnected.call(this);
     }
 
-    public attributeChangedCallback() {
-      onAttributeChange.call(this);
+    public attributeChangedCallback(...args) {
+      onAttributeChange.call(this, ...args);
     }
 
     public disconnectedCallback() {
