@@ -195,23 +195,26 @@ describe('define()', () => {
       const customTitle = 'customTitle';
       const props = { value: 'attrUpdate' };
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+      const html = '<button>Click here</button>';
 
       define('message-nine', () => Message, ['custom-title']);
 
       const element = document.createElement('message-nine');
 
       element.setAttribute('custom-title', customTitle);
-      element.innerHTML = json;
+      element.innerHTML = json + html;
 
       root.appendChild(element);
 
       expect(root.innerHTML).toEqual(
-        `<message-nine><h2>${customTitle}</h2><em>${props.value}</em></message-nine>`
+        `<message-nine><h2>${customTitle}</h2><em>${props.value}</em>${html}</message-nine>`
       );
 
       element.setAttribute('custom-title', '');
 
-      expect(root.innerHTML).toEqual(`<message-nine><em>${props.value}</em></message-nine>`);
+      expect(root.innerHTML).toEqual(
+        `<message-nine><em>${props.value}</em>${html}</message-nine>`
+      );
     });
   });
 
