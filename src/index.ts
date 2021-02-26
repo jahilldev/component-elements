@@ -97,9 +97,12 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
       return element;
     };
 
+    CustomElement.observedAttributes = attributes;
+
     CustomElement.prototype = Object.create(HTMLElement.prototype);
     CustomElement.prototype.constructor = CustomElement;
     CustomElement.prototype.connectedCallback = onConnected;
+    CustomElement.prototype.attributeChangedCallback = onAttributeChange;
     CustomElement.prototype.disconnectedCallback = onDisconnected;
 
     return CustomElement;
@@ -109,8 +112,14 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
     __component = component;
     __attributes = attributes;
 
+    observedAttributes = attributes;
+
     public connectedCallback() {
       onConnected.call(this);
+    }
+
+    public attributeChangedCallback() {
+      onAttributeChange.call(this);
     }
 
     public disconnectedCallback() {
@@ -160,6 +169,16 @@ async function onConnected(this: CustomElement) {
   this.innerHTML = '';
 
   render(h(component, { ...data, ...attributes, children }), this);
+}
+
+/* -----------------------------------
+ *
+ * Attribute
+ *
+ * -------------------------------- */
+
+function onAttributeChange() {
+  // TBD
 }
 
 /* -----------------------------------
