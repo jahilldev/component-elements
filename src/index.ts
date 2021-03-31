@@ -61,9 +61,10 @@ function define<P = {}>(
   attributes: string[] = []
 ): FunctionComponent<P> {
   const preRender = typeof window === 'undefined';
+  const elementTag = getElementTag(tagName);
 
   if (!preRender) {
-    customElements.define(tagName, setupElement(child, attributes));
+    customElements.define(elementTag, setupElement(child, attributes));
 
     return;
   }
@@ -75,7 +76,7 @@ function define<P = {}>(
   }
 
   return (props: P) =>
-    h(tagName, { server: true }, [
+    h(elementTag, { server: true }, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
@@ -87,6 +88,22 @@ function define<P = {}>(
 /* -----------------------------------
  *
  * Element
+ *
+ * -------------------------------- */
+
+function getElementTag(tagName: string) {
+  let result = tagName.toLowerCase();
+
+  if (result.indexOf('-') < 0) {
+    result = 'component-' + result;
+  }
+
+  return result;
+}
+
+/* -----------------------------------
+ *
+ * Setup
  *
  * -------------------------------- */
 

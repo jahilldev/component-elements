@@ -20,7 +20,9 @@ $ npm i preactement
 
 # Using define()
 
-`preactement` exports one function, `define()`. This allows us to register a custom element via a provided key, and provide the component we'd like to render within. It can also generate a custom element with props ready for hydration if run on the server
+`preactement` exports one function, `define()`. This allows us to register a custom element via a provided key, and provide the component we'd like to render within. It can also generate a custom element with props ready for hydration if run on the server.
+
+The first argument **must be a valid custom element string**, e.g hyphenated. If you do not provide this, a prefix of `component-` will be applied to your element name.
 
 # In the browser
 

@@ -61,6 +61,22 @@ describe('define()', () => {
       document.body.removeChild(root);
     });
 
+    it('validates tag name value with prefix if needed', () => {
+      const props = { value: 'propsValue' };
+
+      define('message', () => Message);
+
+      const element = document.createElement('component-message');
+
+      element.setAttribute('props', JSON.stringify(props));
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toEqual(
+        `<component-message><em>${props.value}</em></component-message>`
+      );
+    });
+
     it('renders component correctly when from props attribute', async () => {
       const props = { value: 'propsValue' };
 
