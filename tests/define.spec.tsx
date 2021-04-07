@@ -63,32 +63,32 @@ describe('define()', () => {
 
     it('validates tag name value with prefix if needed', () => {
       const props = { value: 'propsValue' };
+      const json = JSON.stringify(props);
 
       define('message', () => Message);
 
       const element = document.createElement('component-message');
 
-      element.setAttribute('props', JSON.stringify(props));
+      element.setAttribute('props', json);
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(
-        `<component-message><em>${props.value}</em></component-message>`
-      );
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('renders component correctly when from props attribute', async () => {
       const props = { value: 'propsValue' };
+      const json = JSON.stringify(props);
 
       define('message-one', () => Message);
 
       const element = document.createElement('message-one');
 
-      element.setAttribute('props', JSON.stringify(props));
+      element.setAttribute('props', json);
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(`<message-one><em>${props.value}</em></message-one>`);
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('renders component correctly when from json script block', async () => {
@@ -189,9 +189,7 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(
-        `<message-seven><h2>${customTitle}</h2><em>${props.value}</em></message-seven>`
-      );
+      expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em>${props.value}</em>`);
     });
 
     it('errors if component cannot be found in function', async () => {
@@ -222,15 +220,11 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(
-        `<message-nine><h2>${customTitle}</h2><em>${props.value}</em>${html}</message-nine>`
-      );
+      expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em>${props.value}</em>${html}`);
 
       element.setAttribute('custom-title', '');
 
-      expect(root.innerHTML).toEqual(
-        `<message-nine><em>${props.value}</em>${html}</message-nine>`
-      );
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>${html}`);
     });
   });
 
@@ -270,15 +264,11 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(
-        `<message-class><h2>${customTitle}</h2><em>${props.value}</em>${html}</message-class>`
-      );
+      expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em>${props.value}</em>${html}`);
 
       element.setAttribute('custom-title', '');
 
-      expect(root.innerHTML).toEqual(
-        `<message-class><em>${props.value}</em>${html}</message-class>`
-      );
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>${html}`);
     });
   });
 

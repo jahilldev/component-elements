@@ -22,6 +22,7 @@ type ComponentAsync<P = {}> =
 enum ErrorTypes {
   Promise = 'Error: Promises cannot be used for preactement SSR',
   Missing = 'Error: Cannot find component in provided function',
+  Json = 'Error: Invalid JSON string passed to component',
 }
 
 /* -----------------------------------
@@ -121,7 +122,7 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
       return element;
     };
 
-    CustomElement.observedAttributes = attributes;
+    CustomElement.observedAttributes = ['props', ...attributes];
 
     CustomElement.prototype = Object.create(HTMLElement.prototype);
     CustomElement.prototype.constructor = CustomElement;
@@ -139,7 +140,7 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
     __properties = {};
     __children = [];
 
-    static observedAttributes = attributes;
+    static observedAttributes = ['props', ...attributes];
 
     public connectedCallback() {
       onConnected.call(this);
@@ -165,9 +166,7 @@ async function onConnected(this: CustomElement) {
   const attributes = getElementAttributes(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = JSON.parse(props || json?.innerHTML || '{}');
-
-  this.removeAttribute('props');
+  const data = parseJson(props || json?.innerHTML || '{}');
 
   json?.remove();
 
@@ -216,11 +215,15 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
 
   updated = updated == null ? undefined : updated;
 
-  const props = this.__properties;
+  let props = this.__properties;
 
-  props[getPropKey(name)] = updated;
+  if (name === 'props') {
+    props = { ...props, ...parseJson(updated) };
+  } else {
+    props[getPropKey(name)] = updated;
+  }
 
-  this.removeAttribute(name);
+  this.__properties = props;
 
   render(h(this.__instance, { ...props, children: this.__children }), this);
 }
@@ -256,8 +259,6 @@ function getElementAttributes(element: CustomElement) {
     }
 
     result[getPropKey(item.name)] = item.value;
-
-    element.removeAttribute(item.name);
   }
 
   return result;
@@ -305,6 +306,24 @@ function getNameFromTag(value: string) {
   value = value.toLowerCase();
 
   return value.replace(/(^\w|-\w)/g, (item) => item.replace(/-/, '').toUpperCase());
+}
+
+/* -----------------------------------
+ *
+ * parseJson
+ *
+ * -------------------------------- */
+
+function parseJson(value: string): any {
+  let result = {};
+
+  try {
+    result = JSON.parse(value);
+  } catch {
+    console.error(ErrorTypes.Json);
+  }
+
+  return result;
 }
 
 /* -----------------------------------
