@@ -63,13 +63,12 @@ describe('define()', () => {
 
     it('validates tag name value with prefix if needed', () => {
       const props = { value: 'propsValue' };
-      const json = JSON.stringify(props);
 
       define('message', () => Message);
 
       const element = document.createElement('component-message');
 
-      element.setAttribute('props', json);
+      element.setAttribute('props', JSON.stringify(props));
 
       root.appendChild(element);
 
@@ -78,13 +77,12 @@ describe('define()', () => {
 
     it('renders component correctly when from props attribute', async () => {
       const props = { value: 'propsValue' };
-      const json = JSON.stringify(props);
 
       define('message-one', () => Message);
 
       const element = document.createElement('message-one');
 
-      element.setAttribute('props', json);
+      element.setAttribute('props', JSON.stringify(props));
 
       root.appendChild(element);
 
@@ -103,7 +101,7 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(`<message-two><em>${props.value}</em></message-two>`);
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('sets contained HTML as children prop when not server rendered', async () => {
@@ -119,9 +117,7 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(
-        `<message-three><em>${props.value}</em>${html}</message-three>`
-      );
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>${html}`);
     });
 
     it('does not use contained HTML if server rendered', async () => {
@@ -138,7 +134,7 @@ describe('define()', () => {
 
       root.appendChild(element);
 
-      expect(root.innerHTML).toEqual(`<message-four><em>${props.value}</em></message-four>`);
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('renders component asynchronously when provided', async () => {
@@ -155,7 +151,7 @@ describe('define()', () => {
 
       await flushPromises();
 
-      expect(root.innerHTML).toEqual(`<message-five><em>${props.value}</em></message-five>`);
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('tries to infer the component if not explicitly returned', async () => {
@@ -172,7 +168,7 @@ describe('define()', () => {
 
       await flushPromises();
 
-      expect(root.innerHTML).toEqual(`<message-six><em>${props.value}</em></message-six>`);
+      expect(root.innerHTML).toContain(`<em>${props.value}</em>`);
     });
 
     it('merges defined attributes in array with component props', () => {
