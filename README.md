@@ -121,6 +121,10 @@ define('hero-banner', () => HeroBanner, ['title-text']);
 
 These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
 
+## Useful things
+
+By default, all components will be provided with a `parent` prop. This is a reference to the root element that the component has been rendered within. This can be useful when working with Web Components, or you wish to apply changes to the custom element. This will **only be defined when run on the client**.
+
 ## Nested HTML
 
 You can also provide nested HTML to your components `children` property. For example:

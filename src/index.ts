@@ -200,7 +200,7 @@ async function onConnected(this: CustomElement) {
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(component, { ...data, ...attributes, children }), this);
+  render(h(component, { ...data, ...attributes, parent: this, children }), this);
 }
 
 /* -----------------------------------
