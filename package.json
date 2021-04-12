@@ -41,6 +41,6 @@
     "webpack-node-externals": "2.5.2"
   },
   "peerDependencies": {
-    "preact": "^10.5.12"
+    "preact": "^10.x"
   }
 }
