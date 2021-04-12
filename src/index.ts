@@ -225,7 +225,7 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
 
   this.__properties = props;
 
-  render(h(this.__instance, { ...props, children: this.__children }), this);
+  render(h(this.__instance, { ...props, parent: this, children: this.__children }), this);
 }
 
 /* -----------------------------------
