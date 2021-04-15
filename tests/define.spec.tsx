@@ -240,6 +240,31 @@ describe('define()', () => {
 
       expect(root.innerHTML).toContain(`<section><em>${props.value}</em></section>`);
     });
+
+    it('correctly passes props through formatProps if provided', () => {
+      const props = { Value: 'formatProps' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
+      const formatProps = (props: any) => {
+        const keys = Object.keys(props);
+
+        return keys.reduce((result, key) => {
+          result[key.toLowerCase()] = props[key];
+
+          return result;
+        }, {});
+      };
+
+      define('message-eleven', () => Message, { formatProps });
+
+      const element = document.createElement('message-eleven');
+
+      element.innerHTML = json;
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toContain(`<em>${props.Value}</em>`);
+    });
   });
 
   describe('when run in the browser (no "Reflect.construct")', () => {
