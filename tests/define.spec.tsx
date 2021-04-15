@@ -1,4 +1,4 @@
-import { h, Fragment } from 'preact';
+import { h, Fragment, ComponentFactory } from 'preact';
 import { mount } from 'enzyme';
 import { define } from '../src/index';
 
@@ -221,6 +221,24 @@ describe('define()', () => {
       element.setAttribute('custom-title', '');
 
       expect(root.innerHTML).toContain(`<em>${props.value}</em>${html}`);
+    });
+
+    it('wraps component in an HOC if provided', () => {
+      const props = { value: 'wrapComponent' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+
+      const wrapComponent = (child: ComponentFactory<any>) => (props: any) =>
+        h('section', {}, h(child, props));
+
+      define('message-ten', () => Message, { wrapComponent });
+
+      const element = document.createElement('message-ten');
+
+      element.innerHTML = json;
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toContain(`<section><em>${props.value}</em></section>`);
     });
   });
 
