@@ -15,6 +15,18 @@ type ComponentAsync<P = {}> =
 
 /* -----------------------------------
  *
+ * Options
+ *
+ * -------------------------------- */
+
+interface IOptions {
+  attributes?: string[];
+  formatProps?: (props: any) => any;
+  wrapComponent?: <P>(child: ComponentFactory<P>) => ComponentFactory<P>;
+}
+
+/* -----------------------------------
+ *
  * Errors
  *
  * -------------------------------- */
@@ -34,10 +46,10 @@ enum ErrorTypes {
 interface CustomElement extends HTMLElement {
   __mounted: boolean;
   __component: ComponentFunction;
-  __attributes: string[];
   __properties?: object;
   __instance?: ComponentType<any>;
   __children?: any[];
+  __options: IOptions;
 }
 
 /* -----------------------------------
@@ -59,13 +71,14 @@ const isPromise = (input: any): input is Promise<any> => {
 function define<P = {}>(
   tagName: string,
   child: ComponentFunction<P>,
-  attributes: string[] = []
+  options: IOptions = {}
 ): FunctionComponent<P> {
+  const { wrapComponent } = options;
   const preRender = typeof window === 'undefined';
   const elementTag = getElementTag(tagName);
 
   if (!preRender) {
-    customElements.define(elementTag, setupElement(child, attributes));
+    customElements.define(elementTag, setupElement(child, options));
 
     return;
   }
@@ -76,13 +89,19 @@ function define<P = {}>(
     throw new Error(ErrorTypes.Promise);
   }
 
+  let component = content;
+
+  if (wrapComponent) {
+    component = wrapComponent(content);
+  }
+
   return (props: P) =>
     h(elementTag, { server: true }, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
       }),
-      h(content, props),
+      h(component, props),
     ]);
 }
 
@@ -108,16 +127,18 @@ function getElementTag(tagName: string) {
  *
  * -------------------------------- */
 
-function setupElement<T>(component: ComponentFunction<T>, attributes: string[]): any {
+function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}): any {
+  const { attributes = [] } = options;
+
   if (typeof Reflect !== 'undefined' && Reflect.construct) {
     const CustomElement = function () {
       const element = Reflect.construct(HTMLElement, [], CustomElement);
 
       element.__mounted = false;
       element.__component = component;
-      element.__attributes = attributes;
       element.__properties = {};
       element.__children = [];
+      element.__options = options;
 
       return element;
     };
@@ -136,9 +157,9 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
   return class CustomElement extends HTMLElement {
     __mounted = false;
     __component = component;
-    __attributes = attributes;
     __properties = {};
     __children = [];
+    __options = options;
 
     static observedAttributes = ['props', ...attributes];
 
@@ -163,10 +184,12 @@ function setupElement<T>(component: ComponentFunction<T>, attributes: string[]):
  * -------------------------------- */
 
 async function onConnected(this: CustomElement) {
+  const { formatProps, wrapComponent } = this.__options;
+
   const attributes = getElementAttributes(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = parseJson(props || json?.innerHTML || '{}');
+  const data = parseJson(props || json?.innerHTML || '{}', formatProps);
 
   json?.remove();
 
@@ -183,6 +206,10 @@ async function onConnected(this: CustomElement) {
     console.error(ErrorTypes.Missing);
 
     return;
+  }
+
+  if (wrapComponent) {
+    component = wrapComponent(component);
   }
 
   let children;
@@ -209,6 +236,8 @@ async function onConnected(this: CustomElement) {
  * -------------------------------- */
 
 function onAttributeChange(this: CustomElement, name: string, original: string, updated: string) {
+  const { formatProps } = this.__options;
+
   if (!this.__mounted) {
     return;
   }
@@ -218,7 +247,7 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
   let props = this.__properties;
 
   if (name === 'props') {
-    props = { ...props, ...parseJson(updated) };
+    props = { ...props, ...parseJson(updated, formatProps) };
   } else {
     props[getPropKey(name)] = updated;
   }
@@ -245,6 +274,8 @@ function onDisconnected(this: CustomElement) {
  * -------------------------------- */
 
 function getElementAttributes(element: CustomElement) {
+  const { attributes = [] } = element.__options;
+
   const result = {};
 
   if (!element.hasAttributes()) {
@@ -254,7 +285,7 @@ function getElementAttributes(element: CustomElement) {
   for (var i = element.attributes.length - 1; i >= 0; i--) {
     const item = element.attributes[i];
 
-    if (element.__attributes.indexOf(item.name) === -1) {
+    if (attributes.indexOf(item.name) === -1) {
       continue;
     }
 
@@ -314,13 +345,17 @@ function getNameFromTag(value: string) {
  *
  * -------------------------------- */
 
-function parseJson(value: string): any {
+function parseJson(value: string, formatProps: IOptions['formatProps']): any {
   let result = {};
 
   try {
     result = JSON.parse(value);
   } catch {
     console.error(ErrorTypes.Json);
+  }
+
+  if (formatProps) {
+    result = formatProps(result);
   }
 
   return result;

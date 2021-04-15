@@ -176,7 +176,7 @@ describe('define()', () => {
       const props = { value: 'attrProps' };
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
 
-      define('message-seven', () => Message, ['custom-title']);
+      define('message-seven', () => Message, { attributes: ['custom-title'] });
 
       const element = document.createElement('message-seven');
 
@@ -207,7 +207,7 @@ describe('define()', () => {
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
       const html = '<button>Click here</button>';
 
-      define('message-nine', () => Message, ['custom-title']);
+      define('message-nine', () => Message, { attributes: ['custom-title'] });
 
       const element = document.createElement('message-nine');
 
@@ -251,7 +251,7 @@ describe('define()', () => {
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
       const html = '<button>Click here</button>';
 
-      define('message-class', () => Message, ['custom-title']);
+      define('message-class', () => Message, { attributes: ['custom-title'] });
 
       const element = document.createElement('message-class');
 
