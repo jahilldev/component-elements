@@ -13,7 +13,7 @@ const config = ({ mode }): Configuration => ({
     index: path.join(__dirname, './src/index.ts'),
   },
   mode: mode || 'development',
-  target: 'node',
+  target: 'es5',
   externals: [nodeExternals()],
   devtool: mode === 'development' ? 'eval-source-map' : void 0,
   context: path.join(__dirname, `./src`),
