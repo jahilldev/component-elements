@@ -133,7 +133,7 @@ define('hero-banner', () => HeroBanner, {
 
 ### attributes
 
-If you require custom attributes to be passed down to your component, you'll need to specify this in this array. For example:
+If you require custom attributes to be passed down to your component, you'll need to specify them in this array. For example:
 
 ```javascript
 define('hero-banner', () => HeroBanner, { attributes: ['banner-title'] });
