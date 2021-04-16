@@ -22,6 +22,7 @@ const config = ({ mode }): Configuration => ({
     path: path.join(__dirname, './dist'),
     filename: '[name].js',
     libraryTarget: 'umd',
+    globalObject: 'this',
   },
   resolve: {
     extensions: ['.ts', '.tsx', 'json'],
