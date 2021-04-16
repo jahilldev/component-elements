@@ -117,7 +117,7 @@ This allows you to provide a function to process or format your props prior to t
 
 ### wrapComponent
 
-If you need to wrap your component prior to render with a higher order function, your can provide it here. For example, if you asynchronously resolve your component, but also make use of Redux, you'll need to provide a `wrapComponent` function to apply the Provider HOC etc. It can also be useful for themeing, or other use cases.
+If you need to wrap your component prior to render with a higher order function, you can provide it here. For example, if you asynchronously resolve your component, but also make use of Redux, you'll need to provide a `wrapComponent` function to apply the Provider HOC etc. It can also be useful for themeing, or other use cases.
 
 ## Properties
 
