@@ -1,6 +1,6 @@
 {
   "name": "preactement",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": "git@github.com:jhukdev/preactement.git",
@@ -18,7 +18,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "preact-markup": "^2.1.1"
+    "preact-markup": "^2.1.1",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@types/enzyme": "^3.10.8",
