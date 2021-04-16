@@ -184,12 +184,13 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
  * -------------------------------- */
 
 async function onConnected(this: CustomElement) {
-  const { formatProps, wrapComponent } = this.__options;
+  const { tagName } = this;
+  const { wrapComponent } = this.__options;
 
-  const attributes = getElementAttributes(this);
+  const attributes = getElementAttributes.call(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
-  const data = parseJson(props || json?.innerHTML || '{}', formatProps);
+  const data = parseJson.call(this, props || json?.innerHTML || '{}');
 
   json?.remove();
 
@@ -203,7 +204,7 @@ async function onConnected(this: CustomElement) {
   }
 
   if (!component) {
-    console.error(ErrorTypes.Missing);
+    console.error(ErrorTypes.Missing, `<${tagName.toLowerCase()}>`);
 
     return;
   }
@@ -247,7 +248,7 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
   let props = this.__properties;
 
   if (name === 'props') {
-    props = { ...props, ...parseJson(updated, formatProps) };
+    props = { ...props, ...parseJson.call(this, updated) };
   } else {
     props[getPropKey(name)] = updated;
   }
@@ -273,17 +274,17 @@ function onDisconnected(this: CustomElement) {
  *
  * -------------------------------- */
 
-function getElementAttributes(element: CustomElement) {
-  const { attributes = [] } = element.__options;
+function getElementAttributes(this: CustomElement) {
+  const { attributes = [] } = this.__options;
 
   const result = {};
 
-  if (!element.hasAttributes()) {
+  if (!this.hasAttributes()) {
     return result;
   }
 
-  for (var i = element.attributes.length - 1; i >= 0; i--) {
-    const item = element.attributes[i];
+  for (var i = this.attributes.length - 1; i >= 0; i--) {
+    const item = this.attributes[i];
 
     if (attributes.indexOf(item.name) === -1) {
       continue;
@@ -345,13 +346,16 @@ function getNameFromTag(value: string) {
  *
  * -------------------------------- */
 
-function parseJson(value: string, formatProps: IOptions['formatProps']): any {
+function parseJson(this: CustomElement, value: string): any {
+  const { tagName } = this;
+  const { formatProps } = this.__options;
+
   let result = {};
 
   try {
     result = JSON.parse(value);
   } catch {
-    console.error(ErrorTypes.Json);
+    console.error(ErrorTypes.Json, `<${tagName.toLowerCase()}>`);
   }
 
   if (formatProps) {
