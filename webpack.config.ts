@@ -41,6 +41,11 @@ const config = ({ mode }): Configuration => ({
         use: [
           {
             loader: 'ts-loader',
+            options: {
+              compilerOptions: {
+                target: 'es5',
+              },
+            },
           },
         ],
       },

@@ -203,8 +203,8 @@ describe('define()', () => {
 
     it('updates component props when attributes are changed', () => {
       const customTitle = 'customTitle';
+      const updatedProp = 'updated!';
       const props = { value: 'attrUpdate' };
-      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
       const html = '<button>Click here</button>';
 
       define('message-nine', () => Message, { attributes: ['custom-title'] });
@@ -212,15 +212,18 @@ describe('define()', () => {
       const element = document.createElement('message-nine');
 
       element.setAttribute('custom-title', customTitle);
-      element.innerHTML = json + html;
+      element.setAttribute('props', JSON.stringify(props));
+
+      element.innerHTML = html;
 
       root.appendChild(element);
 
       expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em>${props.value}</em>${html}`);
 
       element.setAttribute('custom-title', '');
+      element.setAttribute('props', JSON.stringify({ ...props, value: updatedProp }));
 
-      expect(root.innerHTML).toContain(`<em>${props.value}</em>${html}`);
+      expect(root.innerHTML).toContain(`<em>${updatedProp}</em>${html}`);
     });
 
     it('wraps component in an HOC if provided', () => {

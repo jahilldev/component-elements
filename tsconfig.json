@@ -5,7 +5,7 @@
     "noEmitOnError": true,
     "allowSyntheticDefaultImports": true,
     "noFallthroughCasesInSwitch": true,
-    "target": "es5",
+    "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": false,
