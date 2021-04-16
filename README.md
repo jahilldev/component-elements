@@ -24,7 +24,7 @@ $ npm i preactement
 
 The first argument **must be a valid custom element string**, e.g hyphenated. If you do not provide this, a prefix of `component-` will be applied to your element name.
 
-# In the browser
+## In the browser
 
 In order to register and render a component, you'll need to call `define()` with your chosen component, e.g:
 
