@@ -87,6 +87,40 @@ function HomePage() {
 }
 ```
 
+## Properties
+
+If you're not running `preactement` on the server, you have several ways of defining props for your component.
+
+#### 1. Nested block of JSON:
+
+```html
+<hero-banner>
+  <script type="application/json">
+    { "titleText": "Hero Banner Title" }
+  </script>
+</hero-banner>
+```
+
+#### 2. A `props` attribute (this must be an encoded JSON string)
+
+```html
+<hero-banner props="{'titleText': 'Hero Banner Title'}"></hero-banner>
+```
+
+#### 3. Custom attributes
+
+```html
+<hero-banner title-text="Hero Banner Title"></hero-banner>
+```
+
+You'll need to define your custom attributes up front when using `define()`, e.g:
+
+```ts
+define('hero-banner', () => HeroBanner, { attributes: ['title-text'] });
+```
+
+These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
+
 ## Options
 
 `define` has a third argument, "options". For example:
@@ -118,40 +152,6 @@ This allows you to provide a function to process or format your props prior to t
 ### wrapComponent
 
 If you need to wrap your component prior to render with a higher order function, you can provide it here. For example, if you asynchronously resolve your component, but also make use of Redux, you'll need to provide a `wrapComponent` function to apply the Provider HOC etc. It can also be useful for themeing, or other use cases.
-
-## Properties
-
-If you're not running `preactement` on the server, you have several ways of defining props for your component.
-
-### 1. Nested block of JSON:
-
-```html
-<hero-banner>
-  <script type="application/json">
-    { "titleText": "Hero Banner Title" }
-  </script>
-</hero-banner>
-```
-
-### 2. A `props` attribute (this must be an encoded JSON string)
-
-```html
-<hero-banner props="{'titleText': 'Hero Banner Title'}"></hero-banner>
-```
-
-### 3. Custom attributes
-
-```html
-<hero-banner title-text="Hero Banner Title"></hero-banner>
-```
-
-You'll need to define your custom attributes up front when using `define()`, e.g:
-
-```ts
-define('hero-banner', () => HeroBanner, { attributes: ['title-text'] });
-```
-
-These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
 
 ## Useful things
 
