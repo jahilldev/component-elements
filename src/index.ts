@@ -86,7 +86,7 @@ function define<P = {}>(
   const content = child();
 
   if (isPromise(content)) {
-    throw new Error(ErrorTypes.Promise);
+    throw new Error(`${ErrorTypes.Promise} : <${tagName}>`);
   }
 
   let component = content;
@@ -204,7 +204,7 @@ async function onConnected(this: CustomElement) {
   }
 
   if (!component) {
-    console.error(ErrorTypes.Missing, `<${tagName.toLowerCase()}>`);
+    console.error(ErrorTypes.Missing, `: <${tagName.toLowerCase()}>`);
 
     return;
   }
@@ -355,7 +355,7 @@ function parseJson(this: CustomElement, value: string): any {
   try {
     result = JSON.parse(value);
   } catch {
-    console.error(ErrorTypes.Json, `<${tagName.toLowerCase()}>`);
+    console.error(ErrorTypes.Json, `: <${tagName.toLowerCase()}>`);
   }
 
   if (formatProps) {
