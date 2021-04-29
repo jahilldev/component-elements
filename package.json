@@ -1,12 +1,21 @@
 {
   "name": "preactement",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": "git@github.com:jhukdev/preactement.git",
   "author": "James Hill <contact@jameshill.dev>",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "preact",
+    "custom elements",
+    "web components",
+    "virtual dom",
+    "partial hydration",
+    "universal",
+    "isomorphic"
+  ],
   "files": [
     "dist"
   ],

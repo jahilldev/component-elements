@@ -237,8 +237,6 @@ async function onConnected(this: CustomElement) {
  * -------------------------------- */
 
 function onAttributeChange(this: CustomElement, name: string, original: string, updated: string) {
-  const { formatProps } = this.__options;
-
   if (!this.__mounted) {
     return;
   }
@@ -346,7 +344,7 @@ function getNameFromTag(value: string) {
  *
  * -------------------------------- */
 
-function parseJson(this: CustomElement, value: string): any {
+function parseJson(this: CustomElement, value: string): object {
   const { tagName } = this;
   const { formatProps } = this.__options;
 
