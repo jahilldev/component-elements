@@ -1,7 +1,8 @@
 {
   "name": "preactement",
   "version": "1.6.0",
-  "main": "./dist/index.js",
+  "main": "./dist/define.js",
+  "module": "./dist/define.module.js",
   "types": "./dist/define.d.ts",
   "repository": "git@github.com:jhukdev/preactement.git",
   "author": "James Hill <contact@jameshill.dev>",
