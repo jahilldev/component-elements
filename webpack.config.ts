@@ -9,8 +9,8 @@ import * as path from 'path';
  * -------------------------------- */
 
 const outputFiles = [
-  { target: 'es5', filename: '[name].js' },
-  { target: 'es2017', filename: '[name].modern.js' },
+  { target: 'es5', filename: '[name].es5.js' },
+  { target: 'es2017', filename: '[name].js' },
 ];
 
 /* -----------------------------------
@@ -21,7 +21,7 @@ const outputFiles = [
 
 const defaultConfig = {
   entry: {
-    index: path.join(__dirname, './src/define.ts'),
+    define: path.join(__dirname, './src/define.ts'),
   },
   externals: [nodeExternals()],
   context: path.join(__dirname, './src'),

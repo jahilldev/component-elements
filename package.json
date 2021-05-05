@@ -1,8 +1,8 @@
 {
   "name": "preactement",
   "version": "1.6.0",
-  "main": "./dist/define.js",
-  "exports": "./dist/define.modern.js",
+  "main": "./dist/define.es5.js",
+  "exports": "./dist/define.js",
   "types": "./dist/define.d.ts",
   "repository": "git@github.com:jhukdev/preactement.git",
   "author": "James Hill <contact@jameshill.dev>",
