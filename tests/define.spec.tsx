@@ -1,6 +1,6 @@
 import { h, Fragment, ComponentFactory } from 'preact';
 import { mount } from 'enzyme';
-import { define } from '../src/index';
+import { define } from '../src/define';
 
 /* -----------------------------------
  *
@@ -329,7 +329,7 @@ describe('define()', () => {
       const props = { value: 'serverValue' };
       const component = define('message-one', () => Message);
 
-      const instance = mount(h(component, props));
+      const instance = mount(h(component, props) as any);
 
       expect(instance.find('message-one').length).toEqual(1);
       expect(instance.find('em').text()).toEqual(props.value);
@@ -343,7 +343,7 @@ describe('define()', () => {
       const props = { value: 'serverValue' };
       const component = define('message-three', () => Message);
 
-      const instance = mount(h(component, props));
+      const instance = mount(h(component, props) as any);
 
       expect(instance.find('script').text()).toEqual(JSON.stringify(props));
     });
