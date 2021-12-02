@@ -231,7 +231,7 @@ function getElementAttributes(this: CustomElement) {
     return result;
   }
 
-  return getAttributeProps(this.attributes);
+  return getAttributeProps(this.attributes, attributes);
 }
 
 /* -----------------------------------

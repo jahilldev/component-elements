@@ -105,7 +105,7 @@ function convertToVDom(node: Element) {
  *
  * -------------------------------- */
 
-function getAttributeProps(attributes: NamedNodeMap) {
+function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]) {
   if (!attributes?.length) {
     return {};
   }
@@ -114,6 +114,10 @@ function getAttributeProps(attributes: NamedNodeMap) {
 
   for (var i = attributes.length - 1; i >= 0; i--) {
     const item = attributes[i];
+
+    if (allowed?.indexOf(item.name) === -1) {
+      continue;
+    }
 
     result[getPropKey(item.name)] = item.value;
   }
