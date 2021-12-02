@@ -1,56 +1,6 @@
 import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
-import Markup from 'preact-markup';
-
-/* -----------------------------------
- *
- * Types
- *
- * -------------------------------- */
-
-type ComponentFunction<P = {}> = () => ComponentResult<P>;
-type ComponentResult<P = {}> = ComponentFactory<P> | ComponentAsync<P>;
-type ComponentAsync<P = {}> =
-  | Promise<ComponentFactory<P>>
-  | Promise<{ [index: string]: ComponentFactory<P> }>;
-
-/* -----------------------------------
- *
- * Options
- *
- * -------------------------------- */
-
-interface IOptions {
-  attributes?: string[];
-  formatProps?: (props: any) => any;
-  wrapComponent?: <P>(child: ComponentFactory<P>) => ComponentFactory<P>;
-}
-
-/* -----------------------------------
- *
- * Errors
- *
- * -------------------------------- */
-
-enum ErrorTypes {
-  Promise = 'Error: Promises cannot be used for preactement SSR',
-  Missing = 'Error: Cannot find component in provided function',
-  Json = 'Error: Invalid JSON string passed to component',
-}
-
-/* -----------------------------------
- *
- * Element
- *
- * -------------------------------- */
-
-interface CustomElement extends HTMLElement {
-  __mounted: boolean;
-  __component: ComponentFunction;
-  __properties?: object;
-  __instance?: ComponentType<any>;
-  __children?: any[];
-  __options: IOptions;
-}
+import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
+import { ComponentFunction, ComponentResult, IOptions, CustomElement, ErrorTypes } from './model';
 
 /* -----------------------------------
  *
@@ -216,7 +166,7 @@ async function onConnected(this: CustomElement) {
   let children;
 
   if (!this.hasAttribute('server')) {
-    children = h(Markup, { markup: this.innerHTML, wrap: false });
+    children = h(parseHtml(this.innerHTML), {});
   }
 
   this.__properties = { ...data, ...attributes };
@@ -281,17 +231,7 @@ function getElementAttributes(this: CustomElement) {
     return result;
   }
 
-  for (var i = this.attributes.length - 1; i >= 0; i--) {
-    const item = this.attributes[i];
-
-    if (attributes.indexOf(item.name) === -1) {
-      continue;
-    }
-
-    result[getPropKey(item.name)] = item.value;
-  }
-
-  return result;
+  return getAttributeProps(this.attributes);
 }
 
 /* -----------------------------------
@@ -318,16 +258,6 @@ async function getAsyncComponent(component: ComponentResult, tagName: string) {
 
 /* -----------------------------------
  *
- * Attribute
- *
- * -------------------------------- */
-
-function getPropKey(value: string) {
-  return value.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
-}
-
-/* -----------------------------------
- *
  * Tag
  *
  * -------------------------------- */
@@ -336,31 +266,6 @@ function getNameFromTag(value: string) {
   value = value.toLowerCase();
 
   return value.replace(/(^\w|-\w)/g, (item) => item.replace(/-/, '').toUpperCase());
-}
-
-/* -----------------------------------
- *
- * parseJson
- *
- * -------------------------------- */
-
-function parseJson(this: CustomElement, value: string): object {
-  const { tagName } = this;
-  const { formatProps } = this.__options;
-
-  let result = {};
-
-  try {
-    result = JSON.parse(value);
-  } catch {
-    console.error(ErrorTypes.Json, `: <${tagName.toLowerCase()}>`);
-  }
-
-  if (formatProps) {
-    result = formatProps(result);
-  }
-
-  return result;
 }
 
 /* -----------------------------------

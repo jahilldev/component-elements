@@ -26,9 +26,6 @@
     "clean": "rimraf ./dist",
     "test": "jest"
   },
-  "dependencies": {
-    "preact-markup": "^2.1.1"
-  },
   "devDependencies": {
     "@types/enzyme": "^3.10.8",
     "@types/jest": "^26.0.24",

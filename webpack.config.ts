@@ -10,7 +10,7 @@ import * as path from 'path';
 
 const config = ({ mode }): Configuration => ({
   entry: {
-    index: path.join(__dirname, './src/index.ts'),
+    index: path.join(__dirname, './src/define.ts'),
   },
   mode: mode || 'development',
   target: 'es5',
