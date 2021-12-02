@@ -32,8 +32,8 @@ function parseJson(this: CustomElement, value: string): object {
  *
  * -------------------------------- */
 
-function parseHtml(html: string): ComponentFactory<{}> {
-  const dom = getXmlDocument(html);
+function parseHtml(this: CustomElement): ComponentFactory<{}> {
+  const dom = getXmlDocument(this.innerHTML);
 
   if (!dom) {
     return void 0;
