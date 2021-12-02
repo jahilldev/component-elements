@@ -10,15 +10,14 @@ import { parseHtml } from '../src/parse';
 
 describe('parse', () => {
   describe('parseHtml()', () => {
-    const html = '<h1>Heading</h1><section><h2 title="Main Title">Hello</h2></section>';
+    const testHeading = 'testHeading';
+    const html = `<h1>${testHeading}</h1><section><h2 title="Main Title">Hello</h2></section>`;
 
     it('correctly converts HTML string into VDom tree', () => {
       const result = parseHtml(html);
       const instance = mount(h(result, {}) as any);
 
-      console.log('HTML', instance.html());
-
-      expect(true).toEqual(true);
+      expect(instance.find('h1').text()).toEqual(testHeading);
     });
   });
 });
