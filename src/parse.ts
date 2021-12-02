@@ -39,9 +39,7 @@ function parseHtml(this: CustomElement): ComponentFactory<{}> {
     return void 0;
   }
 
-  const result = convertToVDom(dom) as JSX.Element;
-
-  return () => result;
+  return () => convertToVDom(dom) as JSX.Element;
 }
 
 /* -----------------------------------
@@ -65,9 +63,7 @@ function getXmlDocument(html: string) {
     return void 0;
   }
 
-  const result = nodes.getElementsByTagName('xml')[0];
-
-  return result;
+  return nodes.getElementsByTagName('xml')[0];
 }
 
 /* -----------------------------------
