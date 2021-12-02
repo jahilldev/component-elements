@@ -191,7 +191,7 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
     return;
   }
 
-  updated = updated == null ? undefined : updated;
+  updated = updated == null ? void 0 : updated;
 
   let props = this.__properties;
 
