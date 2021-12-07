@@ -87,6 +87,7 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
       element.__mounted = false;
       element.__component = component;
       element.__properties = {};
+      element.__slots = {};
       element.__children = [];
       element.__options = options;
 
@@ -108,6 +109,7 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
     __mounted = false;
     __component = component;
     __properties = {};
+    __slots = {};
     __children = [];
     __options = options;
 
@@ -166,10 +168,14 @@ async function onConnected(this: CustomElement) {
   let children;
 
   if (!this.hasAttribute('server')) {
-    children = h(parseHtml.call(this), {});
+    const { result } = parseHtml.call(this);
+
+    children = h(result, {});
   }
 
-  this.__properties = { ...data, ...attributes };
+  const properties = { ...this.__slots, ...data, ...attributes };
+
+  this.__properties = properties;
   this.__instance = component;
   this.__children = children || [];
   this.__mounted = true;
@@ -177,7 +183,7 @@ async function onConnected(this: CustomElement) {
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(component, { ...data, ...attributes, parent: this, children }), this);
+  render(h(component, { ...properties, parent: this, children }), this);
 }
 
 /* -----------------------------------

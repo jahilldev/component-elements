@@ -268,6 +268,21 @@ describe('define()', () => {
 
       expect(root.innerHTML).toContain(`<em>${props.Value}</em>`);
     });
+
+    it('correctly segments <* slot="{key}" /> elements into props', () => {
+      const customTitle = '<em>customTitle</em>';
+      const html = `<div slot="customTitle">${customTitle}</div>`;
+
+      define('message-twelve', () => Message);
+
+      const element = document.createElement('message-twelve');
+
+      element.innerHTML = html;
+
+      root.appendChild(element);
+
+      expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em></em>`);
+    });
   });
 
   describe('when run in the browser (no "Reflect.construct")', () => {

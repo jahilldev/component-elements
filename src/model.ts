@@ -46,9 +46,20 @@ interface CustomElement extends HTMLElement {
   __mounted: boolean;
   __component: ComponentFunction;
   __properties?: object;
+  __slots?: { [index: string]: JSX.Element };
   __instance?: ComponentType<any>;
   __children?: any[];
   __options: IOptions;
+}
+
+/* -----------------------------------
+ *
+ * IProps
+ *
+ * -------------------------------- */
+
+interface IProps {
+  [index: string]: any;
 }
 
 /* -----------------------------------
@@ -57,4 +68,4 @@ interface CustomElement extends HTMLElement {
  *
  * -------------------------------- */
 
-export { ComponentFunction, ComponentResult, IOptions, CustomElement, ErrorTypes };
+export { ComponentFunction, ComponentResult, IOptions, CustomElement, ErrorTypes, IProps };

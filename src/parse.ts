@@ -1,5 +1,17 @@
 import { h, ComponentFactory, Fragment } from 'preact';
-import { ErrorTypes, CustomElement } from './model';
+import { ErrorTypes, CustomElement, IProps } from './model';
+
+/* -----------------------------------
+ *
+ * IParsed
+ *
+ * -------------------------------- */
+
+interface IParsed {
+  [index: string]: any;
+  slots?: { [index: string]: JSX.Element };
+  result?: () => JSX.Element;
+}
 
 /* -----------------------------------
  *
@@ -7,7 +19,7 @@ import { ErrorTypes, CustomElement } from './model';
  *
  * -------------------------------- */
 
-function parseJson(this: CustomElement, value: string): object {
+function parseJson(this: CustomElement, value: string) {
   const { tagName } = this;
   const { formatProps } = this.__options;
 
@@ -32,14 +44,19 @@ function parseJson(this: CustomElement, value: string): object {
  *
  * -------------------------------- */
 
-function parseHtml(this: CustomElement): ComponentFactory<{}> {
+function parseHtml(this: CustomElement): IParsed {
   const dom = getXmlDocument(this.innerHTML);
 
   if (!dom) {
-    return void 0;
+    return {};
   }
 
-  return () => convertToVDom(dom) as JSX.Element;
+  const result = convertToVDom.call(this, dom);
+
+  return {
+    slots: this.__slots,
+    result: () => result as JSX.Element,
+  };
 }
 
 /* -----------------------------------
@@ -72,7 +89,7 @@ function getXmlDocument(html: string) {
  *
  * -------------------------------- */
 
-function convertToVDom(node: Element) {
+function convertToVDom(this: CustomElement, node: Element) {
   if (node.nodeType === 3) {
     return node.textContent || '';
   }
@@ -82,7 +99,9 @@ function convertToVDom(node: Element) {
   }
 
   const nodeName = String(node.nodeName).toLowerCase();
-  const children = () => [].map.call(node.childNodes, convertToVDom);
+  const childNodes = Array.from(node.childNodes);
+  const children = () => childNodes.map((child) => convertToVDom.call(this, child));
+  const { slot, ...props } = getAttributeProps(node.attributes);
 
   if (nodeName === 'script') {
     return null;
@@ -92,7 +111,13 @@ function convertToVDom(node: Element) {
     return h(Fragment, {}, children());
   }
 
-  return h(nodeName, getAttributeProps(node.attributes), children());
+  if (slot) {
+    this.__slots[slot] = h(Fragment, {}, children());
+
+    return null;
+  }
+
+  return h(nodeName, props, children());
 }
 
 /* -----------------------------------
@@ -101,7 +126,7 @@ function convertToVDom(node: Element) {
  *
  * -------------------------------- */
 
-function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]) {
+function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]): IProps {
   if (!attributes?.length) {
     return {};
   }
