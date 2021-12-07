@@ -85,6 +85,7 @@ function convertToVDom(this: CustomElement, node: Element) {
 
   const nodeName = String(node.nodeName).toLowerCase();
   const childNodes = Array.from(node.childNodes);
+
   const children = () => childNodes.map((child) => convertToVDom.call(this, child));
   const { slot, ...props } = getAttributeProps(node.attributes);
 
@@ -97,7 +98,7 @@ function convertToVDom(this: CustomElement, node: Element) {
   }
 
   if (slot) {
-    this.__slots[slot] = getSlotChild(children);
+    this.__slots[slot] = getSlotChildren(children());
 
     return null;
   }
@@ -143,19 +144,18 @@ function getPropKey(value: string) {
 
 /* -----------------------------------
  *
- * getSlotChild
+ * getSlotChildren
  *
  * -------------------------------- */
 
-function getSlotChild(children: () => JSX.Element[]) {
-  const result = children();
+function getSlotChildren(children: JSX.Element[]) {
   const isString = (item) => typeof item === 'string';
 
-  if (result.every(isString)) {
-    return result.join(' ');
+  if (children.every(isString)) {
+    return children.join(' ');
   }
 
-  return h(Fragment, {}, result);
+  return h(Fragment, {}, children);
 }
 
 /* -----------------------------------
