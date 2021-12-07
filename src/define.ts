@@ -168,9 +168,7 @@ async function onConnected(this: CustomElement) {
   let children;
 
   if (!this.hasAttribute('server')) {
-    const { result } = parseHtml.call(this);
-
-    children = h(result, {});
+    children = h(parseHtml.call(this), {});
   }
 
   const properties = { ...this.__slots, ...data, ...attributes };

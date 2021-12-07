@@ -55,34 +55,34 @@ describe('parse', () => {
 
   describe('parseHtml()', () => {
     it('should correctly handle misformed html', () => {
-      const { result } = parseHtml.call({ innerHTML: '<h1 <h2>' });
+      const result = parseHtml.call({ innerHTML: '<h1 <h2>' });
 
       expect(result).toEqual(void 0);
     });
 
     it('handles text values witin custom element', () => {
-      const { result } = parseHtml.call({ innerHTML: testHeading });
+      const result = parseHtml.call({ innerHTML: testHeading });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual(testHeading);
     });
 
     it('handles whitespace within custom element', () => {
-      const { result } = parseHtml.call({ innerHTML: testWhitespace });
+      const result = parseHtml.call({ innerHTML: testWhitespace });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual(testWhitespace);
     });
 
     it('removes script blocks for security', () => {
-      const { result } = parseHtml.call({ innerHTML: testScript });
+      const result = parseHtml.call({ innerHTML: testScript });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual('');
     });
 
     it('correctly converts an HTML string into a VDom tree', () => {
-      const { result } = parseHtml.call({ innerHTML: testHtml });
+      const result = parseHtml.call({ innerHTML: testHtml });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.find('h1').text()).toEqual(testHeading);
