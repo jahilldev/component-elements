@@ -46,7 +46,7 @@ interface CustomElement extends HTMLElement {
   __mounted: boolean;
   __component: ComponentFunction;
   __properties?: object;
-  __slots?: { [index: string]: JSX.Element };
+  __slots?: { [index: string]: JSX.Element | string };
   __instance?: ComponentType<any>;
   __children?: any[];
   __options: IOptions;

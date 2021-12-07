@@ -87,5 +87,21 @@ describe('parse', () => {
 
       expect(instance.find('h1').text()).toEqual(testHeading);
     });
+
+    it('should remove <* slot="{key}"> and apply to props', () => {
+      const slots = {};
+      const slotKey = 'slotKey';
+      const slotValue = 'slotValue';
+
+      const slotHtml = `<em slot="${slotKey}">${slotValue}</em>`;
+      const headingHtml = `<h1>${testHeading}</h1>`;
+      const testHtml = `<section>${headingHtml}${slotHtml}</section>`;
+
+      const result = parseHtml.call({ innerHTML: testHtml, __slots: slots });
+      const instance = mount(h(result, {}) as any);
+
+      expect(instance.html()).toEqual(`<section>${headingHtml}</section>`);
+      expect(slots).toEqual({ [slotKey]: slotValue });
+    });
   });
 });
