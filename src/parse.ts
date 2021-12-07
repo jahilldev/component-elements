@@ -3,18 +3,6 @@ import { ErrorTypes, CustomElement, IProps } from './model';
 
 /* -----------------------------------
  *
- * IParsed
- *
- * -------------------------------- */
-
-interface IParsed {
-  [index: string]: any;
-  slots?: { [index: string]: JSX.Element };
-  result?: () => JSX.Element;
-}
-
-/* -----------------------------------
- *
  * parseJson
  *
  * -------------------------------- */
@@ -44,7 +32,7 @@ function parseJson(this: CustomElement, value: string) {
  *
  * -------------------------------- */
 
-function parseHtml(this: CustomElement): IParsed {
+function parseHtml(this: CustomElement): ComponentFactory<{}> {
   const dom = getXmlDocument(this.innerHTML);
 
   if (!dom) {
