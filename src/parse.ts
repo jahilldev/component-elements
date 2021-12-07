@@ -48,15 +48,12 @@ function parseHtml(this: CustomElement): IParsed {
   const dom = getXmlDocument(this.innerHTML);
 
   if (!dom) {
-    return {};
+    return void 0;
   }
 
   const result = convertToVDom.call(this, dom);
 
-  return {
-    slots: this.__slots,
-    result: () => result as JSX.Element,
-  };
+  return () => result;
 }
 
 /* -----------------------------------
