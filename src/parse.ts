@@ -109,7 +109,7 @@ function convertToVDom(this: CustomElement, node: Element) {
   }
 
   if (slot) {
-    this.__slots[slot] = h(Fragment, {}, children());
+    this.__slots[slot] = getSlotChild(children);
 
     return null;
   }
@@ -151,6 +151,23 @@ function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]): IProps
 
 function getPropKey(value: string) {
   return value.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
+}
+
+/* -----------------------------------
+ *
+ * getSlotChild
+ *
+ * -------------------------------- */
+
+function getSlotChild(children: () => JSX.Element[]) {
+  const result = children();
+  const isString = (item) => typeof item === 'string';
+
+  if (result.every(isString)) {
+    return result.join(' ');
+  }
+
+  return h(Fragment, {}, result);
 }
 
 /* -----------------------------------
