@@ -2,7 +2,7 @@
 
 Sometimes it's useful to let the DOM render our components when needed. Custom Elements are great at this. They provide various methods that can inform you when an element is "connected" or "disconnected" from the DOM.
 
-This package (**only 2KB GZipped**) provides the ability to use an HTML custom element as the root for your components. It's intended to provide an easy way for you to integrate Preact into other server side frameworks that might render your HTML. The exported function can also be used for hydration from SSR in Node.
+This package (only **3KB** GZipped, **2KB** Brotli) provides the ability to use an HTML custom element as the root for your components. It's intended to provide an easy way for you to integrate Preact into other server side frameworks that might render your HTML. The exported function can also be used for hydration from SSR in Node.
 
 # Getting Started
 
@@ -121,6 +121,57 @@ define('hero-banner', () => HeroBanner, { attributes: ['title-text'] });
 
 These will then be merged into your components props in camelCase, so `title-text` will become `titleText`.
 
+## HTML
+
+You can also provide nested HTML to your components `children` property. For example:
+
+```html
+<hero-banner>
+  <h2>Banner Title</h2>
+</hero-banner>
+```
+
+This will correctly convert the `<h2>` into virtual DOM nodes for use in your component, e.g:
+
+```tsx
+/*[...]*/
+
+function HeroBanner({ children }) {
+  return <section>{children}</section>;
+}
+```
+
+### Slots
+
+`preactement` now supports the use of `<* slot="{key}" />` elements, to assign string values or full blocks of HTML to your component props. This is useful if your server defines layout rules that are outside of the scope of your component. For example, given the custom element below:
+
+```html
+<login-form>
+  <h2>Please Login</h2>
+  <div slot="successMessage">
+    <p>You have successfully logged in, congrats!</p>
+    <a href="/account">Continue</a>
+  </div>
+</login-form>
+```
+
+All elements that have a `slot` attribute will be segmented into your components props, using the provided `slot="{value}"` as the key, e.g:
+
+```tsx
+function LoginForm({ successMessage }) {
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  return (
+    <Fragment>
+      {isLoggedIn && successMessage}
+      <form onSubmit={() => setLoggedIn(true)}>{/*[...]*/}</form>
+    </Fragment>
+  );
+}
+```
+
+Slots values can be either primitive strings, or full HTML structures, as seen above.
+
 ## Options
 
 `define` has a third argument, "options". For example:
@@ -156,26 +207,6 @@ If you need to wrap your component prior to render with a higher order function,
 ## Useful things
 
 By default, all components will be provided with a `parent` prop. This is a reference to the root element that the component has been rendered within. This can be useful when working with Web Components, or you wish to apply changes to the custom element. This will **only be defined when run on the client**.
-
-## Nested HTML
-
-You can also provide nested HTML to your components `children` property. For example:
-
-```html
-<hero-banner>
-  <h2>Banner Title</h2>
-</hero-banner>
-```
-
-This will correctly convert the `<h2>` into virtual DOM nodes for use in your component, e.g:
-
-```tsx
-/*[...]*/
-
-function HeroBanner({ children }) {
-  return <section>{children}</section>;
-}
-```
 
 ## ES5 Support
 
