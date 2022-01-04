@@ -2,7 +2,7 @@
 
 Sometimes it's useful to let the DOM render our components when needed. Custom Elements are great at this. They provide various methods that can inform you when an element is "connected" or "disconnected" from the DOM.
 
-This package (only **3KB** GZipped, **2KB** Brotli) provides the ability to use an HTML custom element as the root for your components. It's intended to provide an easy way for you to integrate Preact into other server side frameworks that might render your HTML. The exported function can also be used for hydration from SSR in Node.
+This package (only **2KB** GZipped, **1KB** Brotli) provides the ability to use an HTML custom element as the root for your components. It's intended to provide an easy way for you to integrate Preact into other server side frameworks that might render your HTML. The exported function can also be used for hydration from SSR in Node.
 
 # Getting Started
 
@@ -216,6 +216,16 @@ To support ES5 or older browsers, like IE11, you'll need to install the official
 import '@webcomponents/custom-elements';
 import '@webcomponents/custom-elements/src/native-shim';
 ```
+
+In addition, you'll need to "require" `preactement`. Using `import` or module syntax will deliver the function as ES6. By using "require", the package will know to deliver the ES5 version. E.g:
+
+```javascript
+const { define } = require('preactement');
+
+/*[...]*/
+```
+
+Alternatively, you can transpile the package using your bundler of choice to ensure it's delivered in ES5. Since v1.7.0, `preactement` is exported by default as ES6.
 
 # Acknowledgement
 
