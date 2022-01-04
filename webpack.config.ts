@@ -10,7 +10,7 @@ import * as path from 'path';
 
 const outputFiles = [
   { target: 'es5', filename: '[name].es5.js' },
-  { target: 'es2017', filename: '[name].js' },
+  { target: 'es2016', filename: '[name].js' },
 ];
 
 /* -----------------------------------
@@ -54,7 +54,7 @@ const defaultConfig = {
  * -------------------------------- */
 
 const config = ({ mode }): Configuration[] =>
-  outputFiles.map(({ target, filename }) => ({
+  outputFiles.map(({ target, filename, ...config }) => ({
     ...defaultConfig,
     target,
     devtool: mode === 'development' ? 'eval-source-map' : void 0,
@@ -88,6 +88,7 @@ const config = ({ mode }): Configuration[] =>
         __DEV__: mode === 'development',
       }),
     ],
+    ...config,
   }));
 
 /* -----------------------------------
