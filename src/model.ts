@@ -68,4 +68,12 @@ interface IProps {
  *
  * -------------------------------- */
 
-export { ComponentFunction, ComponentResult, IOptions, CustomElement, ErrorTypes, IProps };
+export {
+  ComponentFunction,
+  ComponentResult,
+  ComponentAsync,
+  IOptions,
+  CustomElement,
+  ErrorTypes,
+  IProps,
+};
