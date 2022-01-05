@@ -1,6 +1,6 @@
 import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
 import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
-import { ComponentFunction, ComponentResult, IOptions, CustomElement, ErrorTypes } from './model';
+import { ComponentFunction, ComponentAsync, IOptions, CustomElement, ErrorTypes } from './model';
 
 /* -----------------------------------
  *
@@ -135,7 +135,7 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
  *
  * -------------------------------- */
 
-async function onConnected(this: CustomElement) {
+function onConnected(this: CustomElement) {
   const { tagName } = this;
   const { wrapComponent } = this.__options;
 
@@ -146,25 +146,6 @@ async function onConnected(this: CustomElement) {
 
   json?.remove();
 
-  let response = this.__component();
-  let component: ComponentType;
-
-  if (isPromise(response)) {
-    component = await getAsyncComponent(response, this.tagName);
-  } else {
-    component = response;
-  }
-
-  if (!component) {
-    console.error(ErrorTypes.Missing, `: <${tagName.toLowerCase()}>`);
-
-    return;
-  }
-
-  if (wrapComponent) {
-    component = wrapComponent(component);
-  }
-
   let children;
 
   if (!this.hasAttribute('server')) {
@@ -174,14 +155,21 @@ async function onConnected(this: CustomElement) {
   const properties = { ...this.__slots, ...data, ...attributes };
 
   this.__properties = properties;
-  this.__instance = component;
   this.__children = children || [];
   this.__mounted = true;
 
   this.removeAttribute('server');
   this.innerHTML = '';
 
-  render(h(component, { ...properties, parent: this, children }), this);
+  const response = this.__component();
+
+  if (isPromise(response)) {
+    getAsyncComponent(response, this.tagName).then((result) =>
+      renderComponent.call(this, result)
+    );
+  } else {
+    renderComponent.call(this, response);
+  }
 }
 
 /* -----------------------------------
@@ -240,24 +228,59 @@ function getElementAttributes(this: CustomElement) {
 
 /* -----------------------------------
  *
+ * Render
+ *
+ * -------------------------------- */
+
+function renderComponent(this: CustomElement, component: any) {
+  const { tagName } = this;
+  const { wrapComponent } = this.__options;
+
+  if (!component) {
+    console.error(ErrorTypes.Missing, `: <${tagName.toLowerCase()}>`);
+
+    return;
+  }
+
+  if (wrapComponent) {
+    component = wrapComponent(component);
+  }
+
+  this.__instance = component;
+  this.__mounted = true;
+
+  this.removeAttribute('server');
+  this.innerHTML = '';
+
+  const props = {
+    ...this.__properties,
+    parent: this,
+    children: this.__children,
+  };
+
+  render(h(component, props), this);
+}
+
+/* -----------------------------------
+ *
  * Component
  *
  * -------------------------------- */
 
-async function getAsyncComponent(component: ComponentResult, tagName: string) {
+function getAsyncComponent(component: ComponentAsync, tagName: string) {
   let result: ComponentFactory;
 
-  const response = await component;
+  return component.then((response) => {
+    if (typeof response === 'function') {
+      return response;
+    }
 
-  if (typeof response === 'function') {
-    return response;
-  }
+    if (typeof response === 'object') {
+      result = response[getNameFromTag(tagName)] || void 0;
+    }
 
-  if (typeof response === 'object') {
-    result = response[getNameFromTag(tagName)] || void 0;
-  }
-
-  return result;
+    return result;
+  });
 }
 
 /* -----------------------------------
