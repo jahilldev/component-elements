@@ -157,15 +157,15 @@ function onConnected(this: CustomElement) {
   this.innerHTML = '';
 
   const response = this.__component();
-  const render = (result: ComponentFactory) => renderComponent.call(this, result);
+  const renderer = (result: ComponentFactory) => renderComponent.call(this, result);
 
   if (isPromise(response)) {
-    getAsyncComponent(response, this.tagName).then(render);
+    getAsyncComponent(response, this.tagName).then(renderer);
 
     return;
   }
 
-  render(response);
+  renderer(response);
 }
 
 /* -----------------------------------
@@ -260,7 +260,10 @@ function renderComponent(this: CustomElement, component: any) {
  *
  * -------------------------------- */
 
-function getAsyncComponent(component: ComponentAsync, tagName: string) {
+function getAsyncComponent(
+  component: ComponentAsync,
+  tagName: string
+): Promise<ComponentFactory> {
   let result: ComponentFactory;
 
   return component.then((response) => {
