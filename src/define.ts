@@ -161,9 +161,11 @@ function onConnected(this: CustomElement) {
 
   if (isPromise(response)) {
     getAsyncComponent(response, this.tagName).then(render);
-  } else {
-    render(response);
+
+    return;
   }
+
+  render(response);
 }
 
 /* -----------------------------------
