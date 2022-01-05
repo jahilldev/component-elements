@@ -1,18 +1,12 @@
 {
   "name": "preactement",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "repository": "git@github.com:jhukdev/preactement.git",
   "author": "James Hill <contact@jameshill.dev>",
   "license": "MIT",
   "private": false,
   "main": "./dist/define.es5.js",
   "types": "./dist/define.d.ts",
-  "exports": {
-    ".": {
-      "require": "./dist/define.es5.js",
-      "default": "./dist/define.js"
-    }
-  },
   "keywords": [
     "preact",
     "custom elements",

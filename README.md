@@ -217,16 +217,6 @@ import '@webcomponents/custom-elements';
 import '@webcomponents/custom-elements/src/native-shim';
 ```
 
-In addition, you'll need to "require" `preactement`. Using `import` or module syntax will deliver the function as ES6. By using "require", the package will know to deliver the ES5 version. E.g:
-
-```javascript
-const { define } = require('preactement');
-
-/*[...]*/
-```
-
-Alternatively, you can transpile the package using your bundler of choice to ensure it's delivered in ES5. Since v1.7.0, `preactement` is exported by default as ES6.
-
 # Acknowledgement
 
 This function takes _heavy_ inspiration from the excellent [preact-custom-element](https://github.com/preactjs/preact-custom-element). That library served as a starting point for this package, and all of the Preact guys deserve a massive dose of gratitude. I had slightly different needs, so decided to build this as part solution, part learning excersize.
