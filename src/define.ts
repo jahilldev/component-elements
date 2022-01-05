@@ -136,9 +136,6 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
  * -------------------------------- */
 
 function onConnected(this: CustomElement) {
-  const { tagName } = this;
-  const { wrapComponent } = this.__options;
-
   const attributes = getElementAttributes.call(this);
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
@@ -152,9 +149,7 @@ function onConnected(this: CustomElement) {
     children = h(parseHtml.call(this), {});
   }
 
-  const properties = { ...this.__slots, ...data, ...attributes };
-
-  this.__properties = properties;
+  this.__properties = { ...this.__slots, ...data, ...attributes };
   this.__children = children || [];
   this.__mounted = true;
 
@@ -162,13 +157,12 @@ function onConnected(this: CustomElement) {
   this.innerHTML = '';
 
   const response = this.__component();
+  const render = (result: ComponentFactory) => renderComponent.call(this, result);
 
   if (isPromise(response)) {
-    getAsyncComponent(response, this.tagName).then((result) =>
-      renderComponent.call(this, result)
-    );
+    getAsyncComponent(response, this.tagName).then(render);
   } else {
-    renderComponent.call(this, response);
+    render(response);
   }
 }
 
@@ -248,9 +242,6 @@ function renderComponent(this: CustomElement, component: any) {
 
   this.__instance = component;
   this.__mounted = true;
-
-  this.removeAttribute('server');
-  this.innerHTML = '';
 
   const props = {
     ...this.__properties,
