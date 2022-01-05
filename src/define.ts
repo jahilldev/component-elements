@@ -157,7 +157,7 @@ function onConnected(this: CustomElement) {
   this.innerHTML = '';
 
   const response = this.__component();
-  const renderer = (result: ComponentFactory) => renderComponent.call(this, result);
+  const renderer = (result: ComponentFactory) => finaliseComponent.call(this, result);
 
   if (isPromise(response)) {
     getAsyncComponent(response, this.tagName).then(renderer);
@@ -224,11 +224,11 @@ function getElementAttributes(this: CustomElement) {
 
 /* -----------------------------------
  *
- * Render
+ * Finalise
  *
  * -------------------------------- */
 
-function renderComponent(this: CustomElement, component: any) {
+function finaliseComponent(this: CustomElement, component: any) {
   const { tagName } = this;
   const { wrapComponent } = this.__options;
 
