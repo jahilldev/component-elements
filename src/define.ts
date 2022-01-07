@@ -1,4 +1,4 @@
-import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
+import { h, render, ComponentFactory, FunctionComponent } from 'preact';
 import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
 import {
   ComponentFunction,
