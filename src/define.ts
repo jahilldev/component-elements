@@ -1,6 +1,13 @@
 import { h, render, ComponentFactory, FunctionComponent, ComponentType } from 'preact';
 import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
-import { ComponentFunction, ComponentAsync, IOptions, CustomElement, ErrorTypes } from './model';
+import {
+  ComponentFunction,
+  ComponentAsync,
+  IProps,
+  IOptions,
+  CustomElement,
+  ErrorTypes,
+} from './model';
 
 /* -----------------------------------
  *
@@ -228,7 +235,7 @@ function getElementAttributes(this: CustomElement) {
  *
  * -------------------------------- */
 
-function finaliseComponent(this: CustomElement, component: any) {
+function finaliseComponent(this: CustomElement, component: ComponentFactory<IProps>) {
   const { tagName } = this;
   const { wrapComponent } = this.__options;
 
