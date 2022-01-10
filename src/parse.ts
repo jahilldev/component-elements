@@ -87,7 +87,7 @@ function convertToVDom(this: CustomElement, node: Element) {
   const childNodes = Array.from(node.childNodes);
 
   const children = () => childNodes.map((child) => convertToVDom.call(this, child));
-  const { slot, ...props } = getAttributeProps(node.attributes);
+  const { slot, ...props } = getAttributeObject(node.attributes);
 
   if (nodeName === 'script') {
     return null;
@@ -108,25 +108,43 @@ function convertToVDom(this: CustomElement, node: Element) {
 
 /* -----------------------------------
  *
+ * getAttributeObject
+ *
+ * -------------------------------- */
+
+function getAttributeObject(attributes: NamedNodeMap): IProps {
+  const result = {};
+
+  if (!attributes?.length) {
+    return result;
+  }
+
+  for (var i = attributes.length - 1; i >= 0; i--) {
+    const item = attributes[i];
+
+    result[item.name] = item.value;
+  }
+
+  return result;
+}
+
+/* -----------------------------------
+ *
  * getAttributeProps
  *
  * -------------------------------- */
 
 function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]): IProps {
-  if (!attributes?.length) {
-    return {};
-  }
+  const values = getAttributeObject(attributes);
 
   let result = {};
 
-  for (var i = attributes.length - 1; i >= 0; i--) {
-    const item = attributes[i];
-
-    if (allowed?.indexOf(item.name) === -1) {
+  for (const key of Object.keys(values)) {
+    if (allowed?.indexOf(key) === -1) {
       continue;
     }
 
-    result[getPropKey(item.name)] = item.value;
+    result[getPropKey(key)] = values[key];
   }
 
   return result;
