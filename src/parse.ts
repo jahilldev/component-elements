@@ -119,7 +119,7 @@ function getAttributeObject(attributes: NamedNodeMap): IProps {
     return result;
   }
 
-  for (var i = attributes.length - 1; i >= 0; i--) {
+  for (let i = attributes.length - 1; i >= 0; i--) {
     const item = attributes[i];
 
     result[item.name] = item.value;
