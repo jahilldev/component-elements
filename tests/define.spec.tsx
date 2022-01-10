@@ -107,7 +107,7 @@ describe('define()', () => {
     it('sets contained HTML as children prop when not server rendered', async () => {
       const props = { value: 'childMarkup' };
       const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
-      const html = '<p>Lorem ipsum dolor</p><button>Click here</button>';
+      const html = '<p data-title="test">Testing</p><button title="test">Click here</button>';
 
       define('message-three', () => Message);
 
