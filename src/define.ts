@@ -158,7 +158,6 @@ function onConnected(this: CustomElement) {
 
   this.__properties = { ...this.__slots, ...data, ...attributes };
   this.__children = children || [];
-  this.__mounted = true;
 
   this.removeAttribute('server');
   this.innerHTML = '';
