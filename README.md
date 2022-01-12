@@ -145,7 +145,7 @@ function HeroBanner({ children }) {
 
 ### Important
 
-Any HTML provided to the custom element **must be valid**; As we're using the DOM's native parser which can be quite lax, this might result in unusual bugs if the contents passed are not properly sanitised or structured. For example:
+Any HTML provided to the custom element **must be valid**; As we're using the DOM's native parser which can be quite lax, if the contents passed are not properly sanitised or structured this might result in unusual bugs. For example:
 
 This will result in a Preact error:
 
