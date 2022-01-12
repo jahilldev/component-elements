@@ -33,7 +33,7 @@ function parseJson(this: CustomElement, value: string) {
  * -------------------------------- */
 
 function parseHtml(this: CustomElement): ComponentFactory<{}> {
-  const dom = getXmlDocument(this.innerHTML);
+  const dom = getDocument(this.innerHTML);
 
   if (!dom) {
     return void 0;
@@ -46,26 +46,26 @@ function parseHtml(this: CustomElement): ComponentFactory<{}> {
 
 /* -----------------------------------
  *
- * getXmlDocument
+ * getDocument
  *
  * -------------------------------- */
 
-function getXmlDocument(html: string) {
-  const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<xml>${html}</xml>`;
+function getDocument(html: string) {
+  const value = `<!DOCTYPE html>\n<html><body>${html}</body></html>`;
 
   let nodes: Document;
 
   try {
-    nodes = new DOMParser().parseFromString(xml, 'application/xml');
-  } catch (error) {
-    throw new Error(error);
+    nodes = new DOMParser().parseFromString(value, 'text/html');
+  } catch {
+    // no-op
   }
 
   if (!nodes) {
     return void 0;
   }
 
-  return nodes.getElementsByTagName('xml')[0];
+  return nodes.body;
 }
 
 /* -----------------------------------
@@ -93,7 +93,7 @@ function convertToVDom(this: CustomElement, node: Element) {
     return null;
   }
 
-  if (nodeName === 'xml') {
+  if (nodeName === 'body') {
     return h(Fragment, {}, children());
   }
 
