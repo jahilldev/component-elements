@@ -54,12 +54,6 @@ describe('parse', () => {
   });
 
   describe('parseHtml()', () => {
-    it('should correctly handle misformed html', () => {
-      const result = parseHtml.call({ innerHTML: '<h1 <h2>' });
-
-      expect(result).toEqual(void 0);
-    });
-
     it('handles text values witin custom element', () => {
       const result = parseHtml.call({ innerHTML: testHeading });
       const instance = mount(h(result, {}) as any);
