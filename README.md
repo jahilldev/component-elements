@@ -143,6 +143,23 @@ function HeroBanner({ children }) {
 }
 ```
 
+### Important
+
+Any HTML provided to the custom element **must be valid**; As we're using the DOM's native parser it can be quite lax, and this might result in unusual bugs if the contents passed are not properly sanitised. For example:
+
+This will result in a Preact error:
+
+```jsx
+<p Hello
+```
+
+This will result in an H1 tag:
+
+```jsx
+<h1>Hello
+<h1>Hello</h3>
+```
+
 ### Slots
 
 `preactement` now supports the use of `<* slot="{key}" />` elements, to assign string values or full blocks of HTML to your component props. This is useful if your server defines layout rules that are outside of the scope of your component. For example, given the custom element below:
