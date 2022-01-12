@@ -76,7 +76,7 @@ function getDocument(html: string) {
 
 function convertToVDom(this: CustomElement, node: Element) {
   if (node.nodeType === 3) {
-    return node.textContent || '';
+    return node.textContent?.trim() || '';
   }
 
   if (node.nodeType !== 1) {

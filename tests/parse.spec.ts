@@ -75,7 +75,8 @@ describe('parse', () => {
       const result = parseHtml.call({ innerHTML: testWhitespace });
       const instance = mount(h(result, {}) as any);
 
-      expect(instance.text()).toEqual(testWhitespace);
+      expect(instance.text()).toEqual('');
+      expect(instance.html()).toEqual('');
     });
 
     it('removes script blocks for security', () => {
