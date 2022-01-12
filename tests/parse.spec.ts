@@ -30,6 +30,8 @@ describe('parse', () => {
       __options: {},
     };
 
+    afterAll(() => errorSpy.mockClear());
+
     it('should correctly parse json', () => {
       const result = parseJson.call(properties, testJson);
 
@@ -56,10 +58,8 @@ describe('parse', () => {
   describe('parseHtml()', () => {
     it('should correctly handle misformed html', () => {
       const testText = 'testText';
-      const result = parseHtml.call({ innerHTML: `<h1>Hello` });
+      const result = parseHtml.call({ innerHTML: `<h1>${testText}` });
       const instance = mount(h(result, {}) as any);
-
-      console.log('Misformed HTML:', instance.html());
 
       expect(instance.html()).toEqual(`<h1>${testText}</h1>`);
     });
