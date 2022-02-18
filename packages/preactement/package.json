@@ -1,0 +1,50 @@
+{
+  "name": "preactement",
+  "version": "1.6.7",
+  "author": "James Hill <contact@jameshill.dev>",
+  "homepage": "https://github.com/jahilldev/component-elements/tree/main/packages/preactement#readme",
+  "license": "MIT",
+  "main": "./dist/define.es5.js",
+  "types": "./dist/define.d.ts",
+  "keywords": [
+    "preact",
+    "custom elements",
+    "web components",
+    "virtual dom",
+    "partial hydration",
+    "universal",
+    "isomorphic",
+    "hydrate",
+    "component"
+  ],
+  "directories": {
+    "lib": "dist",
+    "test": "tests"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahilldev/component-elements.git"
+  },
+  "scripts": {
+    "start": "run-s clean watch",
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch",
+    "clean": "rimraf ./dist",
+    "test": "jest"
+  },
+  "bugs": {
+    "url": "https://github.com/jahilldev/component-elements/issues"
+  },
+  "peerDependencies": {
+    "preact": ">=10"
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.11",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-preact-pure": "^3.3.0",
+    "preact": "^10.6.6"
+  }
+}

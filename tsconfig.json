@@ -1,26 +1,21 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
-    "outDir": "./dist",
-    "noEmitOnError": true,
-    "allowSyntheticDefaultImports": true,
-    "noFallthroughCasesInSwitch": true,
-    "target": "ES2018",
     "module": "commonjs",
-    "moduleResolution": "node",
-    "sourceMap": false,
-    "experimentalDecorators": true,
     "declaration": true,
-    "resolveJsonModule": true,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "noEmitOnError": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "esModuleInterop": true,
-    "jsx": "react",
-    "jsxFactory": "h",
-    "lib": ["ES2015", "ES2016", "ES2017", "ES2018", "ES2019"],
+    "moduleResolution": "node",
+    "target": "es6",
+    "sourceMap": true,
+    "lib": ["DOM", "ES2015", "ES2016", "ES2017", "ES2018", "ES2019"],
     "paths": {
-      "@/*": ["./src/*"],
-      "react": ["node_modules/preact/compat"],
-      "react-dom": ["node_modules/preact/compat"]
+      "@/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules", "webpack.config.ts", "./dist", "./tests"]
+  "exclude": ["node_modules", "webpack.config.ts", "tests", "./dist"]
 }

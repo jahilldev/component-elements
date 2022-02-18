@@ -1,9 +1,13 @@
 module.exports = {
   env: {
     es2020: true,
+    jsdom: true,
     node: true,
+    jest: true,
   },
-  globals: {},
+  globals: {
+    'jest/globals': true,
+  },
   extends: ['eslint:recommended', 'prettier'],
   parser: '@typescript-eslint/parser',
   parserOptions: {

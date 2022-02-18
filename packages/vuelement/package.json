@@ -1,0 +1,53 @@
+{
+  "name": "vuelement",
+  "version": "0.0.1",
+  "author": "James Hill <contact@jameshill.dev>",
+  "homepage": "https://github.com/jahilldev/component-elements/tree/main/packages/vuelement#readme",
+  "license": "MIT",
+  "main": "./dist/define.es5.js",
+  "types": "./dist/define.d.ts",
+  "keywords": [
+    "vue",
+    "custom elements",
+    "web components",
+    "virtual dom",
+    "partial hydration",
+    "universal",
+    "isomorphic",
+    "hydrate",
+    "component"
+  ],
+  "directories": {
+    "lib": "dist",
+    "test": "tests"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jahilldev/component-elements.git"
+  },
+  "scripts": {
+    "start": "run-s clean watch",
+    "build": "webpack --mode=production",
+    "watch": "webpack --watch",
+    "clean": "rimraf ./dist",
+    "test": "jest"
+  },
+  "bugs": {
+    "url": "https://github.com/jahilldev/component-elements/issues"
+  },
+  "peerDependencies": {
+    "vue": ">=3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@vue/cli": "^5.0.1",
+    "@vue/cli-plugin-babel": "^5.0.1",
+    "babel-jest": "^26.6.3",
+    "vue": "^3.2.31",
+    "vue-jest": "^5.0.0-alpha.10",
+    "vue-loader": "^17.0.0"
+  }
+}

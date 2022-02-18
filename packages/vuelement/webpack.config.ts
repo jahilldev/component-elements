@@ -30,6 +30,7 @@ const defaultConfig = {
     filename: '[name].js',
     libraryTarget: 'umd',
     globalObject: 'this',
+    chunkFormat: 'commonjs',
   },
   resolve: {
     extensions: ['.ts', '.tsx', 'json'],
@@ -78,6 +79,10 @@ const config = ({ mode }): Configuration[] =>
               },
             },
           ],
+        },
+        {
+          test: /\.vue$/,
+          loader: 'vue-loader',
         },
       ],
     },
