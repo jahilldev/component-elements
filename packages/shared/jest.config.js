@@ -15,14 +15,13 @@ module.exports = {
   // coverageThreshold: {
   //   global: {
   //     statements: 97,
-  //     branches: 88,
+  //     branches: 86,
   //     functions: 100,
   //     lines: 97,
   //   },
   // },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    '.*\\.(vue)$': 'vue-jest',
     '^.+\\js$': 'babel-jest',
   },
 };

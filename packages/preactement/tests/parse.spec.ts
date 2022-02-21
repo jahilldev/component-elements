@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import { parseJson, parseHtml } from '../src/parse';
+import { parseHtml } from '../src/parse';
 
 /* -----------------------------------
  *
@@ -13,7 +13,6 @@ const testWhitespace = '    ';
 const testHtml = `<h1>${testHeading}</h1><section><h2 title="Main Title">Hello</h2></section>`;
 const testScript = `<script>alert('danger')</script>`;
 const testData = { testHeading };
-const testJson = JSON.stringify(testData);
 
 /* -----------------------------------
  *
@@ -22,39 +21,6 @@ const testJson = JSON.stringify(testData);
  * -------------------------------- */
 
 describe('parse', () => {
-  describe('parseJson()', () => {
-    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-
-    const properties = {
-      tagName: 'tag-name',
-      __options: {},
-    };
-
-    afterAll(() => errorSpy.mockClear());
-
-    it('should correctly parse json', () => {
-      const result = parseJson.call(properties, testJson);
-
-      expect(result).toEqual(testData);
-    });
-
-    it('should handle invalid json', () => {
-      const result = parseJson.call(properties, '{test:}');
-
-      expect(result).toEqual({});
-      expect(errorSpy).toHaveBeenCalled();
-    });
-
-    it('should run "formatProps" if defined via options', () => {
-      const formatProps = (props: any) => ({ ...props, format: true });
-      const testProps = { ...properties, __options: { ...properties.__options, formatProps } };
-      const result = parseJson.call(testProps, testJson);
-
-      expect(result.hasOwnProperty('format')).toBe(true);
-      expect(result.format).toEqual(true);
-    });
-  });
-
   describe('parseHtml()', () => {
     it('should correctly handle misformed html', () => {
       const testText = 'testText';
