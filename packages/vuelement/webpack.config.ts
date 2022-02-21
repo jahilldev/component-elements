@@ -33,7 +33,7 @@ const defaultConfig = {
     chunkFormat: 'commonjs',
   },
   resolve: {
-    extensions: ['.ts', '.tsx', 'json'],
+    extensions: ['.js', '.ts', '.tsx', 'json'],
     alias: {
       '@': path.join(__dirname, '../'),
     },

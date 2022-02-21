@@ -1,7 +1,7 @@
 {
-  "name": "shared",
+  "name": "@component-elements/shared",
   "version": "1.0.0",
-  "main": "./dist/index.js",
+  "main": "./dist/parse.js",
   "license": "MIT",
   "directories": {
     "lib": "dist",
@@ -9,7 +9,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "rimraf ./dist",
     "watch": "tsc -w"
   }
 }
