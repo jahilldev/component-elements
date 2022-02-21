@@ -1,7 +1,8 @@
 {
   "name": "@component-elements/shared",
   "version": "1.0.0",
-  "main": "./dist/parse.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "license": "MIT",
   "directories": {
     "lib": "dist",
