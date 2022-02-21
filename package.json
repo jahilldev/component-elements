@@ -2,6 +2,7 @@
   "name": "component-elements",
   "private": true,
   "scripts": {
+    "setup": "lerna bootstrap",
     "install": "lerna exec -- yarn",
     "clean": "lerna run clean",
     "build": "run-s clean build:*",
