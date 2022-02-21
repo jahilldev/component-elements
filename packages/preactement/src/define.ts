@@ -1,5 +1,6 @@
 import { h, render, ComponentFactory, FunctionComponent } from 'preact';
-import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
+import { parseJson } from '@component-elements/shared';
+import { parseHtml, getPropKey, getAttributeProps } from './parse';
 import {
   ComponentFunction,
   ComponentAsync,
