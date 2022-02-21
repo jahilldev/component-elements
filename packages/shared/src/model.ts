@@ -17,6 +17,7 @@ interface IOptions {
  * -------------------------------- */
 
 enum ErrorTypes {
+  Missing = 'Error: Cannot find component in provided function',
   Json = 'Error: Invalid JSON string passed to component',
 }
 
@@ -26,14 +27,24 @@ enum ErrorTypes {
  *
  * -------------------------------- */
 
-interface CustomElement extends HTMLElement {
+interface CustomElement<C = any, I = any> extends HTMLElement {
   __mounted: boolean;
-  __component: any;
+  __component: C;
   __properties?: object;
   __slots?: { [index: string]: any };
-  __instance?: any;
+  __instance?: I;
   __children?: any[];
   __options: IOptions;
+}
+
+/* -----------------------------------
+ *
+ * IProps
+ *
+ * -------------------------------- */
+
+interface IProps {
+  [index: string]: any;
 }
 
 /* -----------------------------------
@@ -42,4 +53,4 @@ interface CustomElement extends HTMLElement {
  *
  * -------------------------------- */
 
-export { ErrorTypes, IOptions, CustomElement };
+export { ErrorTypes, IOptions, IProps, CustomElement };

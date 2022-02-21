@@ -34,9 +34,6 @@ const defaultConfig = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx', 'json'],
-    alias: {
-      '@': path.join(__dirname, '../'),
-    },
   },
   node: {
     __filename: true,
