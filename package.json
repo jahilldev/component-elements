@@ -4,10 +4,9 @@
   "scripts": {
     "install": "lerna exec -- yarn",
     "clean": "lerna run clean",
-    "deploy": "run-s build deploy",
     "build": "run-s clean build:*",
     "build:packages": "lerna run build",
-    "publish": "lerna run publish",
+    "publish": "lerna publish",
     "test": "lerna run test"
   },
   "devDependencies": {
