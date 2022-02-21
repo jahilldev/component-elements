@@ -1,6 +1,5 @@
 import { h, ComponentFactory, Fragment } from 'preact';
-import { getDocument, getAttributeObject } from '@component-elements/shared';
-import { CustomElement } from './model';
+import { CustomElement, getDocument, getAttributeObject } from '@component-elements/shared';
 
 /* -----------------------------------
  *
