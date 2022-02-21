@@ -1,6 +1,6 @@
 import { h, ComponentFactory, Fragment } from 'preact';
-import { getDocument } from '@component-elements/shared';
-import { CustomElement, IProps } from './model';
+import { getDocument, getAttributeObject } from '@component-elements/shared';
+import { CustomElement } from './model';
 
 /* -----------------------------------
  *
@@ -60,60 +60,6 @@ function convertToVDom(this: CustomElement, node: Element) {
 
 /* -----------------------------------
  *
- * getAttributeObject
- *
- * -------------------------------- */
-
-function getAttributeObject(attributes: NamedNodeMap): IProps {
-  const result = {};
-
-  if (!attributes?.length) {
-    return result;
-  }
-
-  for (let i = attributes.length - 1; i >= 0; i--) {
-    const item = attributes[i];
-
-    result[item.name] = item.value;
-  }
-
-  return result;
-}
-
-/* -----------------------------------
- *
- * getAttributeProps
- *
- * -------------------------------- */
-
-function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]): IProps {
-  const values = getAttributeObject(attributes);
-
-  let result = {};
-
-  for (const key of Object.keys(values)) {
-    if (allowed?.indexOf(key) === -1) {
-      continue;
-    }
-
-    result[getPropKey(key)] = values[key];
-  }
-
-  return result;
-}
-
-/* -----------------------------------
- *
- * Attribute
- *
- * -------------------------------- */
-
-function getPropKey(value: string) {
-  return value.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
-}
-
-/* -----------------------------------
- *
  * getSlotChildren
  *
  * -------------------------------- */
@@ -134,4 +80,4 @@ function getSlotChildren(children: JSX.Element[]) {
  *
  * -------------------------------- */
 
-export { parseHtml, getPropKey, getAttributeProps };
+export { parseHtml };
