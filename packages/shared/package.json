@@ -1,0 +1,15 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "license": "MIT",
+  "directories": {
+    "lib": "dist",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rimraf ./dist",
+    "watch": "tsc -w"
+  }
+}

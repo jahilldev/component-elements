@@ -9,6 +9,11 @@
     "publish": "lerna publish",
     "test": "lerna run test"
   },
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
   "devDependencies": {
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.18",
