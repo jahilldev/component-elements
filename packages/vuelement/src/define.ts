@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
+import { parseJson } from '@/shared/parse';
 import { IOptions, CustomElement, ErrorTypes } from './model';
-import { parseJson, parseHtml, getPropKey, getAttributeProps } from './parse';
+import { getPropKey, getAttributeProps } from './parse';
 
 /* -----------------------------------
  *
