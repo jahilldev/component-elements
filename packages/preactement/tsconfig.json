@@ -3,7 +3,10 @@
   "compilerOptions": {
     "outDir": "./dist",
     "jsx": "react",
-    "jsxFactory": "h"
+    "jsxFactory": "h",
+    "paths": {
+      "@/*": ["../*"]
+    }
   },
   "include": ["./src"]
 }
