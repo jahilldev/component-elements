@@ -21,10 +21,8 @@ module.exports = {
       lines: 97,
     },
   },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
+    '^.+\\js$': 'babel-jest',
   },
 };
