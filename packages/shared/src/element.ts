@@ -7,7 +7,7 @@ import { CustomElement } from './model';
  *
  * -------------------------------- */
 
-function getAsyncComponent(component: any, tagName: string): Promise<any> {
+function getAsyncComponent(component: Promise<Function | object>, tagName: string): Promise<any> {
   return component.then((response) => getComponentResult(response, tagName));
 }
 
