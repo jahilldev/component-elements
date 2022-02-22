@@ -4,7 +4,7 @@
   "scripts": {
     "install": "lerna exec -- yarn",
     "clean": "lerna run clean",
-    "prebuild": "lerna bootstrap",
+    "prebuild": "lerna bootstrap --no-ci",
     "build": "run-s clean build:*",
     "build:packages": "lerna run build",
     "publish": "lerna publish",
