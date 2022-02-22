@@ -4,10 +4,10 @@
  *
  * -------------------------------- */
 
-interface IOptions {
+interface IOptions<F = any, W = any> {
   attributes?: string[];
-  formatProps?: (props: any) => any;
-  wrapComponent?: (child: any) => any;
+  formatProps?: (props: any) => F;
+  wrapComponent?: (child: any) => W;
 }
 
 /* -----------------------------------

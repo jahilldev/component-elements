@@ -1,4 +1,4 @@
-import { ComponentFactory, ComponentType } from 'preact';
+import { ComponentFactory } from 'preact';
 
 /* -----------------------------------
  *
@@ -14,8 +14,20 @@ type ComponentAsync<P = {}> =
 
 /* -----------------------------------
  *
+ * IOptions
+ *
+ * -------------------------------- */
+
+interface IOptions {
+  attributes?: string[];
+  formatProps?: <P = any>(props: P) => P;
+  wrapComponent?: <P>(child: ComponentFactory<P>) => ComponentFactory<P>;
+}
+
+/* -----------------------------------
+ *
  * Export
  *
  * -------------------------------- */
 
-export { ComponentFunction, ComponentResult, ComponentAsync };
+export { IOptions, ComponentFunction, ComponentResult, ComponentAsync };
