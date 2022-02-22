@@ -2,6 +2,7 @@ import { h, render, ComponentFactory, FunctionComponent } from 'preact';
 import {
   IOptions,
   IProps,
+  ErrorTypes,
   CustomElement,
   isPromise,
   parseJson,
@@ -9,7 +10,7 @@ import {
   getAttributeProps,
 } from '@component-elements/shared';
 import { parseHtml } from './parse';
-import { ComponentFunction, ComponentAsync, ErrorTypes } from './model';
+import { ComponentFunction, ComponentAsync } from './model';
 
 /* -----------------------------------
  *
