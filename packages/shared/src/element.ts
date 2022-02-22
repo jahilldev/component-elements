@@ -8,19 +8,25 @@ import { CustomElement } from './model';
  * -------------------------------- */
 
 function getAsyncComponent(component: any, tagName: string): Promise<any> {
-  let result;
+  return component.then((response) => getComponentResult(response, tagName));
+}
 
-  return component.then((response) => {
-    if (typeof response === 'function') {
-      return response;
-    }
+/* -----------------------------------
+ *
+ * Result
+ *
+ * -------------------------------- */
 
-    if (typeof response === 'object') {
-      result = response[getNameFromTag(tagName)] || void 0;
-    }
+function getComponentResult(response: Function | object, tagName: string) {
+  if (typeof response === 'function') {
+    return response;
+  }
 
-    return result;
-  });
+  if (typeof response === 'object') {
+    return response[getNameFromTag(tagName)] || void 0;
+  }
+
+  return void 0;
 }
 
 /* -----------------------------------
