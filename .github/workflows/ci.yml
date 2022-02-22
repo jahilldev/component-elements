@@ -30,6 +30,5 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: yarn
-      - run: yarn setup
       - run: yarn build
       - run: yarn test
