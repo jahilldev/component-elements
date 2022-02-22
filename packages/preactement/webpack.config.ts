@@ -82,7 +82,7 @@ const config = ({ mode }): Configuration[] =>
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env'],
+              ...(target === 'es5' && { presets: ['@babel/preset-env'] }),
             },
           },
         },

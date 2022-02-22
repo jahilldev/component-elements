@@ -5,11 +5,13 @@ import {
   CustomElement,
   isPromise,
   parseJson,
+  getElementTag,
   getPropKey,
-  getAttributeProps,
+  getElementAttributes,
+  getAsyncComponent,
 } from '@component-elements/shared';
 import { parseHtml } from './parse';
-import { IOptions, ComponentFunction, ComponentAsync } from './model';
+import { IOptions, ComponentFunction } from './model';
 
 /* -----------------------------------
  *
@@ -52,22 +54,6 @@ function define<P = {}>(
       }),
       h(component, props),
     ]);
-}
-
-/* -----------------------------------
- *
- * Element
- *
- * -------------------------------- */
-
-function getElementTag(tagName: string) {
-  let result = tagName.toLowerCase();
-
-  if (result.indexOf('-') < 0) {
-    result = 'component-' + result;
-  }
-
-  return result;
 }
 
 /* -----------------------------------
@@ -204,24 +190,6 @@ function onDisconnected(this: CustomElement) {
 
 /* -----------------------------------
  *
- * Attributes
- *
- * -------------------------------- */
-
-function getElementAttributes(this: CustomElement) {
-  const { attributes = [] } = this.__options;
-
-  const result = {};
-
-  if (!this.hasAttributes()) {
-    return result;
-  }
-
-  return getAttributeProps(this.attributes, attributes);
-}
-
-/* -----------------------------------
- *
  * Finalise
  *
  * -------------------------------- */
@@ -250,43 +218,6 @@ function finaliseComponent(this: CustomElement, component: ComponentFactory<IPro
   };
 
   render(h(component, props), this);
-}
-
-/* -----------------------------------
- *
- * Component
- *
- * -------------------------------- */
-
-function getAsyncComponent(
-  component: ComponentAsync,
-  tagName: string
-): Promise<ComponentFactory> {
-  let result: ComponentFactory;
-
-  return component.then((response) => {
-    if (typeof response === 'function') {
-      return response;
-    }
-
-    if (typeof response === 'object') {
-      result = response[getNameFromTag(tagName)] || void 0;
-    }
-
-    return result;
-  });
-}
-
-/* -----------------------------------
- *
- * Tag
- *
- * -------------------------------- */
-
-function getNameFromTag(value: string) {
-  value = value.toLowerCase();
-
-  return value.replace(/(^\w|-\w)/g, (item) => item.replace(/-/, '').toUpperCase());
 }
 
 /* -----------------------------------
