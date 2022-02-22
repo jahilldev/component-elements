@@ -17,6 +17,7 @@ interface IOptions {
  * -------------------------------- */
 
 enum ErrorTypes {
+  Promise = 'Error: Promises cannot be used for SSR',
   Missing = 'Error: Cannot find component in provided function',
   Json = 'Error: Invalid JSON string passed to component',
 }
