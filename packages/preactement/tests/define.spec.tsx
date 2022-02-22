@@ -251,7 +251,7 @@ describe('define()', () => {
       const formatProps = (props: any) => {
         const keys = Object.keys(props);
 
-        return keys.reduce((result, key) => {
+        return keys.reduce<any>((result, key) => {
           result[key.toLowerCase()] = props[key];
 
           return result;

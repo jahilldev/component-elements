@@ -1,6 +1,5 @@
 import { h, render, ComponentFactory, FunctionComponent } from 'preact';
 import {
-  IOptions,
   IProps,
   ErrorTypes,
   CustomElement,
@@ -10,7 +9,7 @@ import {
   getAttributeProps,
 } from '@component-elements/shared';
 import { parseHtml } from './parse';
-import { ComponentFunction, ComponentAsync } from './model';
+import { IOptions, ComponentFunction, ComponentAsync } from './model';
 
 /* -----------------------------------
  *

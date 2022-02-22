@@ -1,6 +1,5 @@
 import { createApp } from 'vue';
 import {
-  IOptions,
   CustomElement,
   ErrorTypes,
   isPromise,
@@ -8,6 +7,7 @@ import {
   getPropKey,
   getAttributeProps,
 } from '@component-elements/shared';
+import { IOptions } from './model';
 
 /* -----------------------------------
  *
