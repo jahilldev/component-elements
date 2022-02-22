@@ -1,5 +1,5 @@
 import { getAttributeProps } from './parse';
-import { IComponentFunction, CustomElement } from './model';
+import { IComponent, CustomElement } from './model';
 
 /* -----------------------------------
  *
@@ -7,10 +7,7 @@ import { IComponentFunction, CustomElement } from './model';
  *
  * -------------------------------- */
 
-function getAsyncComponent(
-  component: Promise<IComponentFunction>,
-  tagName: string
-): Promise<any> {
+function getAsyncComponent(component: Promise<IComponent>, tagName: string): Promise<any> {
   return component.then((response) => getComponentResult(response, tagName));
 }
 
@@ -20,7 +17,7 @@ function getAsyncComponent(
  *
  * -------------------------------- */
 
-function getComponentResult(response: IComponentFunction, tagName: string) {
+function getComponentResult(response: IComponent, tagName: string) {
   if (typeof response === 'function') {
     return response;
   }

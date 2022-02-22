@@ -4,7 +4,7 @@
  *
  * -------------------------------- */
 
-type IComponentFunction = () => Function | object;
+type IComponent = () => Function | object;
 
 /* -----------------------------------
  *
@@ -72,4 +72,4 @@ const isPromise = (input: any): input is Promise<any> => {
  *
  * -------------------------------- */
 
-export { IComponentFunction, IOptions, IProps, ErrorTypes, CustomElement, isPromise };
+export { IComponent, IOptions, IProps, ErrorTypes, CustomElement, isPromise };
