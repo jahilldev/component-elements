@@ -5,11 +5,22 @@
   "homepage": "https://github.com/jahilldev/component-elements/tree/main/packages/preactement#readme",
   "license": "MIT",
   "main": "./dist/define.es5.js",
+  "types": "./dist/define.d.ts",
   "exports": {
     ".": "./dist/define.js",
-    "./es5": "./define.es5.js"
+    "./es5": {
+      "type": "./dist/define.d.ts",
+      "import": "./dist/define.es5.js",
+      "require": "./dist/define.es5.js"
+    }
   },
-  "types": "./dist/define.d.ts",
+  "typesVersions": {
+    "*": {
+      "es5": [
+        "./dist/define.d.ts"
+      ]
+    }
+  },
   "keywords": [
     "preact",
     "custom elements",

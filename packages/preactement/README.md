@@ -229,7 +229,7 @@ By default, all components will be provided with a `parent` prop. This is a refe
 
 ## ES5 Support
 
-To support ES5 or older browsers, like IE11, you'll need to install the official Web Component [Custom Element polyfill](https://www.npmjs.com/package/@webcomponents/custom-elements). Once installed, you'll need to import the following at the very top of your entry files:
+To support ES5 or older browsers, like IE11, you'll need to either transpile `preactement`, or import the ES5 version via `preactement/es5`, while also installing the official Web Component [Custom Element polyfill](https://www.npmjs.com/package/@webcomponents/custom-elements). Once installed, you'll need to import the following at the very top of your entry files:
 
 ```javascript
 import '@webcomponents/custom-elements';
