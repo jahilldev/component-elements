@@ -49,8 +49,18 @@ interface IProps {
 
 /* -----------------------------------
  *
+ * Guards
+ *
+ * -------------------------------- */
+
+const isPromise = (input: any): input is Promise<any> => {
+  return input && typeof input.then === 'function';
+};
+
+/* -----------------------------------
+ *
  * Export
  *
  * -------------------------------- */
 
-export { ErrorTypes, IOptions, IProps, CustomElement };
+export { ErrorTypes, IOptions, IProps, CustomElement, isPromise };
