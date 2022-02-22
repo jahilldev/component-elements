@@ -4,8 +4,10 @@ import {
   ErrorTypes,
   isPromise,
   parseJson,
+  getElementTag,
   getPropKey,
-  getAttributeProps,
+  getElementAttributes,
+  getAsyncComponent,
 } from '@component-elements/shared';
 import { IOptions } from './model';
 
@@ -26,22 +28,6 @@ function define<P = {}>(tagName: string, child: any, options: IOptions = {}) {
   }
 
   // TODO ?
-}
-
-/* -----------------------------------
- *
- * Element
- *
- * -------------------------------- */
-
-function getElementTag(tagName: string) {
-  let result = tagName.toLowerCase();
-
-  if (result.indexOf('-') < 0) {
-    result = 'component-' + result;
-  }
-
-  return result;
 }
 
 /* -----------------------------------
@@ -168,24 +154,6 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
 
 /* -----------------------------------
  *
- * Attributes
- *
- * -------------------------------- */
-
-function getElementAttributes(this: CustomElement) {
-  const { attributes = [] } = this.__options;
-
-  const result = {};
-
-  if (!this.hasAttributes()) {
-    return result;
-  }
-
-  return getAttributeProps(this.attributes, attributes);
-}
-
-/* -----------------------------------
- *
  * Finalise
  *
  * -------------------------------- */
@@ -209,40 +177,6 @@ function finaliseComponent(this: CustomElement, component: any) {
   };
 
   createApp(component, props).mount(this);
-}
-
-/* -----------------------------------
- *
- * Component
- *
- * -------------------------------- */
-
-function getAsyncComponent(component: any, tagName: string): Promise<any> {
-  let result: any;
-
-  return component.then((response) => {
-    if (typeof response === 'function') {
-      return response;
-    }
-
-    if (typeof response === 'object') {
-      result = response[getNameFromTag(tagName)] || void 0;
-    }
-
-    return result;
-  });
-}
-
-/* -----------------------------------
- *
- * Tag
- *
- * -------------------------------- */
-
-function getNameFromTag(value: string) {
-  value = value.toLowerCase();
-
-  return value.replace(/(^\w|-\w)/g, (item) => item.replace(/-/, '').toUpperCase());
 }
 
 /* -----------------------------------
