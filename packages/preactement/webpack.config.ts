@@ -77,6 +77,15 @@ const config = ({ mode }): Configuration[] =>
             },
           ],
         },
+        {
+          test: /\.m?js$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env'],
+            },
+          },
+        },
       ],
     },
     performance: {
