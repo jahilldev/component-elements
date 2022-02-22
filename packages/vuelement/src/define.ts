@@ -1,16 +1,13 @@
 import { createApp } from 'vue';
-import { IOptions, CustomElement, ErrorTypes } from './model';
-import { parseJson, getPropKey, getAttributeProps } from './parse';
-
-/* -----------------------------------
- *
- * Guards
- *
- * -------------------------------- */
-
-const isPromise = (input: any): input is Promise<any> => {
-  return input && typeof input.then === 'function';
-};
+import {
+  IOptions,
+  CustomElement,
+  ErrorTypes,
+  isPromise,
+  parseJson,
+  getPropKey,
+  getAttributeProps,
+} from '@component-elements/shared';
 
 /* -----------------------------------
  *

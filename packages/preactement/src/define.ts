@@ -1,24 +1,15 @@
 import { h, render, ComponentFactory, FunctionComponent } from 'preact';
-import { parseJson, getPropKey, getAttributeProps } from '@component-elements/shared';
-import { parseHtml } from './parse';
 import {
-  ComponentFunction,
-  ComponentAsync,
-  IProps,
   IOptions,
+  IProps,
   CustomElement,
-  ErrorTypes,
-} from './model';
-
-/* -----------------------------------
- *
- * Guards
- *
- * -------------------------------- */
-
-const isPromise = (input: any): input is Promise<any> => {
-  return input && typeof input.then === 'function';
-};
+  isPromise,
+  parseJson,
+  getPropKey,
+  getAttributeProps,
+} from '@component-elements/shared';
+import { parseHtml } from './parse';
+import { ComponentFunction, ComponentAsync, ErrorTypes } from './model';
 
 /* -----------------------------------
  *
