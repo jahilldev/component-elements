@@ -68,8 +68,31 @@ const isPromise = (input: any): input is Promise<any> => {
 
 /* -----------------------------------
  *
+ * Self Closing
+ *
+ * -------------------------------- */
+
+const selfClosingTags = [
+  'area',
+  'base',
+  'br',
+  'col',
+  'hr',
+  'img',
+  'input',
+  'link',
+  'meta',
+  'source',
+  'embed',
+  'param',
+  'track',
+  'wbr',
+];
+
+/* -----------------------------------
+ *
  * Export
  *
  * -------------------------------- */
 
-export { IComponent, IOptions, IProps, ErrorTypes, CustomElement, isPromise };
+export { IComponent, IOptions, IProps, ErrorTypes, CustomElement, isPromise, selfClosingTags };
