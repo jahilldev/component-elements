@@ -4,7 +4,7 @@
  *
  * -------------------------------- */
 
-type IComponent = () => Function | object;
+type IComponent = any;
 
 /* -----------------------------------
  *
@@ -39,7 +39,7 @@ enum ErrorTypes {
 interface CustomElement<C = any, I = any> extends HTMLElement {
   __mounted: boolean;
   __component: C;
-  __properties?: object;
+  __properties?: IProps;
   __slots?: { [index: string]: any };
   __instance?: I;
   __children?: any[];

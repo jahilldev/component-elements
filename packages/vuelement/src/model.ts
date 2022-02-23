@@ -1,4 +1,5 @@
-// import {  } from 'vue';
+import { App } from 'vue';
+import { CustomElement as SharedElement } from '@component-elements/shared';
 
 /* -----------------------------------
  *
@@ -14,8 +15,19 @@ interface IOptions {
 
 /* -----------------------------------
  *
+ * Element
+ *
+ * -------------------------------- */
+
+interface CustomElement extends SharedElement {
+  __properties: any;
+  __application?: App;
+}
+
+/* -----------------------------------
+ *
  * Export
  *
  * -------------------------------- */
 
-export { IOptions };
+export { IOptions, CustomElement };
