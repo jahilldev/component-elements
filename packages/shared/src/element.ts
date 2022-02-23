@@ -28,10 +28,6 @@ function getComponentResult(response: IComponent, tagName: string) {
     result = response[getNameFromTag(tagName)] || void 0;
   }
 
-  if (typeof response.render !== 'undefined') {
-    result = response;
-  }
-
   return result;
 }
 
