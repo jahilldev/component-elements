@@ -21,7 +21,7 @@ interface IOptions {
 
 interface CustomElement extends SharedElement {
   __properties: any;
-  __application?: App;
+  __application?: App<Element>;
 }
 
 /* -----------------------------------
