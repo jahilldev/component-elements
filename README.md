@@ -6,8 +6,11 @@ These packages provide the ability to use an HTML custom element as the root for
 
 Depending on your component library, visit the relevant package below and follow setup instructions:
 
-- Preact: [preactement](https://github.com/jahilldev/component-elements/tree/main/packages/preactement#readme)
-- VueJS: [vuelement](https://github.com/jahilldev/component-elements/tree/main/packages/vuelement#readme)
+| Library | Package                                                                                              |
+| ------- | ---------------------------------------------------------------------------------------------------- |
+| Preact  | [preactement](https://github.com/jahilldev/component-elements/tree/main/packages/preactement#readme) |
+| React   | [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme)   |
+| Vue     | <a href="https://vuejs.org/guide/extras/web-components.html" target="_blank">supported natively!</a> |
 
 # Acknowledgement
 
