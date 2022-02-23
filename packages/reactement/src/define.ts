@@ -1,7 +1,9 @@
-import { createApp } from 'vue';
+import React, { createElement, ComponentFactory, FunctionComponent } from 'react';
+import { render } from 'react-dom';
 import {
-  CustomElement,
+  IProps,
   ErrorTypes,
+  CustomElement,
   isPromise,
   parseJson,
   getElementTag,
@@ -9,7 +11,8 @@ import {
   getElementAttributes,
   getAsyncComponent,
 } from '@component-elements/shared';
-import { IOptions } from './model';
+import { parseHtml } from './parse';
+import { IOptions, ComponentFunction } from './model';
 
 /* -----------------------------------
  *
@@ -17,7 +20,12 @@ import { IOptions } from './model';
  *
  * -------------------------------- */
 
-function define<P = {}>(tagName: string, child: any, options: IOptions = {}) {
+function define<P = {}>(
+  tagName: string,
+  child: ComponentFunction<P>,
+  options: IOptions = {}
+): FunctionComponent<P> {
+  const { wrapComponent } = options;
   const preRender = typeof window === 'undefined';
   const elementTag = getElementTag(tagName);
 
@@ -27,7 +35,26 @@ function define<P = {}>(tagName: string, child: any, options: IOptions = {}) {
     return;
   }
 
-  // TODO ?
+  const content = child();
+
+  if (isPromise(content)) {
+    throw new Error(`${ErrorTypes.Promise} : <${tagName}>`);
+  }
+
+  let component = content;
+
+  if (wrapComponent) {
+    component = wrapComponent(content);
+  }
+
+  return (props: P) =>
+    createElement(elementTag, { server: true }, [
+      createElement('script', {
+        type: 'application/json',
+        dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
+      }),
+      createElement(component, props),
+    ]);
 }
 
 /* -----------------------------------
@@ -36,7 +63,7 @@ function define<P = {}>(tagName: string, child: any, options: IOptions = {}) {
  *
  * -------------------------------- */
 
-function setupElement<T>(component: any, options: IOptions = {}): any {
+function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}): any {
   const { attributes = [] } = options;
 
   if (typeof Reflect !== 'undefined' && Reflect.construct) {
@@ -59,7 +86,7 @@ function setupElement<T>(component: any, options: IOptions = {}): any {
     CustomElement.prototype.constructor = CustomElement;
     CustomElement.prototype.connectedCallback = onConnected;
     CustomElement.prototype.attributeChangedCallback = onAttributeChange;
-    // CustomElement.prototype.disconnectedCallback = onDisconnected;
+    CustomElement.prototype.disconnectedCallback = onDisconnected;
 
     return CustomElement;
   }
@@ -83,7 +110,7 @@ function setupElement<T>(component: any, options: IOptions = {}): any {
     }
 
     public disconnectedCallback() {
-      // onDisconnected.call(this);
+      onDisconnected.call(this);
     }
   };
 }
@@ -104,18 +131,20 @@ function onConnected(this: CustomElement) {
 
   let children;
 
-  // if (!this.hasAttribute('server')) {
-  //   children = h(parseHtml.call(this), {});
-  // }
+  if (!this.hasAttribute('server')) {
+    children = createElement(parseHtml.call(this), {});
+  }
 
-  this.__properties = { ...data, ...attributes };
+  this.__properties = { ...this.__slots, ...data, ...attributes };
   this.__children = children || [];
 
   this.removeAttribute('server');
   this.innerHTML = '';
 
   const response = this.__component();
-  const renderer = (result: any) => finaliseComponent.call(this, result);
+
+  const renderer = (result: ComponentFactory<IProps, any>) =>
+    finaliseComponent.call(this, result);
 
   if (isPromise(response)) {
     getAsyncComponent(response, this.tagName).then(renderer);
@@ -149,7 +178,20 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
 
   this.__properties = props;
 
-  createApp(this.__instance, { ...props }).mount(this);
+  render(
+    createElement(this.__instance, { ...props, parent: this, children: this.__children }),
+    this
+  );
+}
+
+/* -----------------------------------
+ *
+ * Disconnected
+ *
+ * -------------------------------- */
+
+function onDisconnected(this: CustomElement) {
+  render(null, this);
 }
 
 /* -----------------------------------
@@ -158,8 +200,9 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
  *
  * -------------------------------- */
 
-function finaliseComponent(this: CustomElement, component: any) {
+function finaliseComponent(this: CustomElement, component: ComponentFactory<IProps, any>) {
   const { tagName } = this;
+  const { wrapComponent } = this.__options;
 
   if (!component) {
     console.error(ErrorTypes.Missing, `: <${tagName.toLowerCase()}>`);
@@ -167,16 +210,20 @@ function finaliseComponent(this: CustomElement, component: any) {
     return;
   }
 
+  if (wrapComponent) {
+    component = wrapComponent(component);
+  }
+
   this.__instance = component;
   this.__mounted = true;
 
   const props = {
     ...this.__properties,
-    // parent: this,
-    // children: this.__children,
+    parent: this,
+    children: this.__children,
   };
 
-  createApp(component, props).mount(this);
+  render(createElement(component, props), this);
 }
 
 /* -----------------------------------

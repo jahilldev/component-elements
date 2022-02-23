@@ -1,8 +1,9 @@
+import React, { createElement, ComponentFactory, Fragment } from 'react';
 import {
   CustomElement,
   getDocument,
   getAttributeObject,
-  getPropKey,
+  selfClosingTags,
 } from '@component-elements/shared';
 
 /* -----------------------------------
@@ -11,7 +12,7 @@ import {
  *
  * -------------------------------- */
 
-function parseHtml(this: CustomElement): any {
+function parseHtml(this: CustomElement): ComponentFactory<{}, any> {
   const dom = getDocument(this.innerHTML);
 
   if (!dom) {
@@ -48,9 +49,13 @@ function convertToVDom(this: CustomElement, node: Element) {
     return null;
   }
 
-  // if (nodeName === 'body') {
-  //   return h(Fragment, {}, children()); // TODO
-  // }
+  if (nodeName === 'body') {
+    return createElement(Fragment, {}, children());
+  }
+
+  if (selfClosingTags.includes(nodeName)) {
+    return createElement(nodeName, props);
+  }
 
   if (slot) {
     this.__slots[slot] = getSlotChildren(children());
@@ -58,7 +63,7 @@ function convertToVDom(this: CustomElement, node: Element) {
     return null;
   }
 
-  // return h(nodeName, props, children()); // TODO
+  return createElement(nodeName, { ...props, key: Math.random() }, children());
 }
 
 /* -----------------------------------
@@ -67,14 +72,14 @@ function convertToVDom(this: CustomElement, node: Element) {
  *
  * -------------------------------- */
 
-function getSlotChildren(children: any[]) {
+function getSlotChildren(children: JSX.Element[]) {
   const isString = (item) => typeof item === 'string';
 
   if (children.every(isString)) {
     return children.join(' ');
   }
 
-  // return h(Fragment, {}, children); // TODO
+  return createElement(Fragment, {}, children);
 }
 
 /* -----------------------------------
@@ -83,4 +88,4 @@ function getSlotChildren(children: any[]) {
  *
  * -------------------------------- */
 
-export { parseHtml, getPropKey };
+export { parseHtml };

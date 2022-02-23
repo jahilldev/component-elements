@@ -10,7 +10,7 @@ import * as path from 'path';
 
 const outputFiles = [
   { target: 'es5', filename: '[name].es5.js' },
-  // { target: 'es2016', filename: '[name].js' },
+  { target: 'es2016', filename: '[name].js' },
 ];
 
 /* -----------------------------------
@@ -82,13 +82,9 @@ const config = ({ mode }): Configuration[] =>
           use: {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env'],
+              ...(target === 'es5' && { presets: ['@babel/preset-env'] }),
             },
           },
-        },
-        {
-          test: /\.vue$/,
-          loader: 'vue-loader',
         },
       ],
     },

@@ -18,15 +18,17 @@ function getAsyncComponent(component: Promise<IComponent>, tagName: string): Pro
  * -------------------------------- */
 
 function getComponentResult(response: IComponent, tagName: string) {
+  let result = void 0;
+
   if (typeof response === 'function') {
     return response;
   }
 
   if (typeof response === 'object') {
-    return response[getNameFromTag(tagName)] || void 0;
+    result = response[getNameFromTag(tagName)] || void 0;
   }
 
-  return void 0;
+  return result;
 }
 
 /* -----------------------------------
