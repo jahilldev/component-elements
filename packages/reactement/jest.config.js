@@ -12,17 +12,17 @@ module.exports = {
   collectCoverageFrom: ['<rootDir>/src/**/*.{ts,tsx}'],
   coverageDirectory: '<rootDir>/tests/coverage',
   coveragePathIgnorePatterns: ['/node_modules/', '(.*).d.ts'],
-  // coverageThreshold: {
-  //   global: {
-  //     statements: 97,
-  //     branches: 88,
-  //     functions: 100,
-  //     lines: 97,
-  //   },
-  // },
+  setupFilesAfterEnv: ['<rootDir>/tests/setup.ts'],
+  coverageThreshold: {
+    global: {
+      statements: 97,
+      branches: 86,
+      functions: 100,
+      lines: 97,
+    },
+  },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
-    '.*\\.(vue)$': 'vue-jest',
     '^.+\\js$': 'babel-jest',
   },
 };

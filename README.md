@@ -7,7 +7,7 @@ These packages provide the ability to use an HTML custom element as the root for
 Depending on your component library, visit the relevant package below and follow setup instructions:
 
 - Preact: [preactement](https://github.com/jahilldev/component-elements/tree/main/packages/preactement#readme)
-- VueJS: [vuelement](https://github.com/jahilldev/component-elements/tree/main/packages/vuelement#readme)
+- React: [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme)
 
 # Acknowledgement
 
