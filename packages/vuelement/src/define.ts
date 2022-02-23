@@ -1,6 +1,5 @@
 import { createApp } from 'vue';
 import {
-  CustomElement,
   ErrorTypes,
   isPromise,
   parseJson,
@@ -9,7 +8,7 @@ import {
   getElementAttributes,
   getAsyncComponent,
 } from '@component-elements/shared';
-import { IOptions } from './model';
+import { IOptions, CustomElement } from './model';
 
 /* -----------------------------------
  *
@@ -149,7 +148,9 @@ function onAttributeChange(this: CustomElement, name: string, original: string, 
 
   this.__properties = props;
 
-  createApp(this.__instance, { ...props }).mount(this);
+  this.__application.unmount();
+  this.__application = createApp(this.__instance, props);
+  this.__application.mount(this);
 }
 
 /* -----------------------------------
@@ -172,11 +173,10 @@ function finaliseComponent(this: CustomElement, component: any) {
 
   const props = {
     ...this.__properties,
-    // parent: this,
-    // children: this.__children,
   };
 
-  createApp(component, props).mount(this);
+  this.__application = createApp(component, props);
+  this.__application.mount(this);
 }
 
 /* -----------------------------------
