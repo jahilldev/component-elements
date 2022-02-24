@@ -27,9 +27,10 @@ function define<P = {}>(
   const { wrapComponent } = options;
   const preRender = typeof window === 'undefined';
   const elementTag = getElementTag(tagName);
+  const customElement = setupElement(child, options);
 
   if (!preRender) {
-    customElements.define(elementTag, setupElement(child, options));
+    customElements.define(elementTag, customElement);
 
     return;
   }
