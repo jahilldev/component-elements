@@ -1,6 +1,6 @@
 # preactement
 
-> Using React? Go to [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme)
+> If you're using React, go to [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme) for more info.
 
 Sometimes it's useful to let the DOM render our components when needed. Custom Elements are great at this. They provide various methods that can inform you when an element is "connected" or "disconnected" from the DOM.
 
