@@ -76,7 +76,7 @@ describe('element', () => {
       expect(result).toEqual(testProps);
     });
 
-    it('ignores attributes that are not defined via options', () => {
+    it('ignores attributes that are not defined via attributes option', () => {
       const result = getElementAttributes.call({ ...element, __options: [] });
 
       expect(result).toEqual({});
