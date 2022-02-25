@@ -1,4 +1,4 @@
-import { getAsyncComponent, getElementTag } from '../src/element';
+import { getAsyncComponent, getElementTag, getElementAttributes } from '../src/element';
 
 /* -----------------------------------
  *
@@ -10,6 +10,9 @@ const testComponent = () => void 0;
 const testObjectKey = 'TagName';
 const testValidTag = 'tag-name';
 const testInvalidTag = 'tag';
+const testAttributeKey = 'testTitle';
+const testProps = { [testAttributeKey]: 'testTitle' };
+const testAttribute = { name: testAttributeKey, value: 'testTitle' };
 
 /* -----------------------------------
  *
@@ -57,6 +60,32 @@ describe('element', () => {
       const result = getElementTag(testValidTag);
 
       expect(result).toEqual(testValidTag);
+    });
+  });
+
+  describe('getElementAttributes()', () => {
+    const element = {
+      __options: { attributes: [testAttributeKey] },
+      attributes: [testAttribute],
+      hasAttributes: () => true,
+    };
+
+    it('ignores attributes that are not defined via options', () => {
+      const result = getElementAttributes.call({ ...element, __options: [] });
+
+      expect(result).toEqual({});
+    });
+
+    it('converts defined attributes into props object', () => {
+      const result = getElementAttributes.call(element);
+
+      expect(result).toEqual(testProps);
+    });
+
+    it('skips conversion if element has no attributes', () => {
+      const result = getElementAttributes.call({ ...element, hasAttributes: () => false });
+
+      expect(result).toEqual({});
     });
   });
 });
