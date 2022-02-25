@@ -70,16 +70,16 @@ describe('element', () => {
       hasAttributes: () => true,
     };
 
-    it('ignores attributes that are not defined via options', () => {
-      const result = getElementAttributes.call({ ...element, __options: [] });
-
-      expect(result).toEqual({});
-    });
-
     it('converts defined attributes into props object', () => {
       const result = getElementAttributes.call(element);
 
       expect(result).toEqual(testProps);
+    });
+
+    it('ignores attributes that are not defined via options', () => {
+      const result = getElementAttributes.call({ ...element, __options: [] });
+
+      expect(result).toEqual({});
     });
 
     it('skips conversion if element has no attributes', () => {
