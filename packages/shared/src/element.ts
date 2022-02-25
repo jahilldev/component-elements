@@ -67,7 +67,6 @@ function getNameFromTag(value: string) {
 
 function getElementAttributes(this: CustomElement) {
   const { attributes = [] } = this.__options;
-
   const result = {};
 
   if (!this.hasAttributes()) {
