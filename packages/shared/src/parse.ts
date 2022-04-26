@@ -100,7 +100,12 @@ function getAttributeProps(attributes: NamedNodeMap, allowed?: string[]): IProps
  * -------------------------------- */
 
 function getPropKey(value: string) {
-  return value.replace(/-([a-z])/g, (value) => value[1].toUpperCase());
+  const sanitised = value.trim().replace(/\s/g, '-').replace(/\_/g, '-');
+
+  return (
+    sanitised.charAt(0).toLowerCase() +
+    sanitised.slice(1).replace(/-([a-z])/g, (value) => value[1].toUpperCase())
+  );
 }
 
 /* -----------------------------------

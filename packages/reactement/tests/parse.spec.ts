@@ -10,7 +10,7 @@ import { parseHtml } from '../src/parse';
 
 const testHeading = 'testHeading';
 const testWhitespace = '    ';
-const testHtml = `<h1>${testHeading}</h1><section><h2 title="Main Title">Hello</h2></section>`;
+const testHtml = `<h1>${testHeading}</h1><br /><section><h2 title="Main Title">Hello</h2></section>`;
 const testScript = `<script>alert('danger')</script>`;
 const testData = { testHeading };
 

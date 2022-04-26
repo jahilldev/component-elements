@@ -10,9 +10,8 @@ import { parseHtml } from '../src/parse';
 
 const testHeading = 'testHeading';
 const testWhitespace = '    ';
-const testHtml = `<h1>${testHeading}</h1><section><h2 title="Main Title">Hello</h2></section>`;
+const testHtml = `<h1>${testHeading}</h1><br /><section><h2 title="Main Title">Hello</h2></section>`;
 const testScript = `<script>alert('danger')</script>`;
-const testData = { testHeading };
 
 /* -----------------------------------
  *
@@ -59,20 +58,23 @@ describe('parse', () => {
       expect(instance.find('h1').text()).toEqual(testHeading);
     });
 
-    it('should remove <* slot="{key}"> and apply to props', () => {
-      const slots = {};
-      const slotKey = 'slotKey';
-      const slotValue = 'slotValue';
+    describe('slots', () => {
+      const testKey = 'testSlot';
 
-      const slotHtml = `<em slot="${slotKey}">${slotValue}</em>`;
-      const headingHtml = `<h1>${testHeading}</h1>`;
-      const testHtml = `<section>${headingHtml}${slotHtml}</section>`;
-
-      const result = parseHtml.call({ innerHTML: testHtml, __slots: slots });
-      const instance = mount(h(result, {}) as any);
-
-      expect(instance.html()).toEqual(`<section>${headingHtml}</section>`);
-      expect(slots).toEqual({ [slotKey]: slotValue });
+      it('should remove <* slot="{key}"> and apply to props', () => {
+        const slots = {};
+        const slotValue = 'slotValue';
+  
+        const slotHtml = `<em slot="${testKey}">${slotValue}</em>`;
+        const headingHtml = `<h1>${testHeading}</h1>`;
+        const testHtml = `<section>${headingHtml}${slotHtml}</section>`;
+  
+        const result = parseHtml.call({ innerHTML: testHtml, __slots: slots });
+        const instance = mount(h(result, {}) as any);
+  
+        expect(instance.html()).toEqual(`<section>${headingHtml}</section>`);
+        expect(slots).toEqual({ [testKey]: slotValue });
+      });
     });
   });
 });

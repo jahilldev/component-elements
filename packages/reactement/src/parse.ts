@@ -4,6 +4,7 @@ import {
   getDocument,
   getAttributeObject,
   selfClosingTags,
+  getPropKey
 } from '@component-elements/shared';
 
 /* -----------------------------------
@@ -58,7 +59,7 @@ function convertToVDom(this: CustomElement, node: Element) {
   }
 
   if (slot) {
-    this.__slots[slot] = getSlotChildren(children());
+    this.__slots[getPropKey(slot)] = getSlotChildren(children());
 
     return null;
   }
