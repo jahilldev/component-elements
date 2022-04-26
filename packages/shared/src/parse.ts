@@ -104,7 +104,7 @@ function getPropKey(value: string) {
 
   return (
     sanitised.charAt(0).toLowerCase() +
-    sanitised.slice(1).replace(/-([a-z])/g, (value) => value[1].toUpperCase())
+    sanitised.slice(1).replace(/-([a-z])/g, ({ 1: value }) => value.toUpperCase())
   );
 }
 
