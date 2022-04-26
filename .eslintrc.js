@@ -1,7 +1,6 @@
 module.exports = {
   env: {
     es2020: true,
-    jsdom: true,
     node: true,
     jest: true,
   },
@@ -14,7 +13,7 @@ module.exports = {
     ecmaVersion: 11,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'jest'],
   rules: {
     'react/display-name': 'off',
     'no-unused-vars': 'off',

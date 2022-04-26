@@ -126,7 +126,6 @@ function onConnected(this: CustomElement) {
   const props = this.getAttribute('props');
   const json = this.querySelector('[type="application/json"]');
   const data = parseJson.call(this, props || json?.innerHTML || '{}');
-
   json?.remove();
 
   let children;
