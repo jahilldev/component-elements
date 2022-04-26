@@ -1,6 +1,8 @@
 {
-  "editor.formatOnSave": true,
   "prettier.requireConfig": true,
+  "eslint.format.enable": true,
+  "editor.formatOnSave": true,
+  "editor.semanticHighlighting.enabled": false,
   "editor.tabSize": 3,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true

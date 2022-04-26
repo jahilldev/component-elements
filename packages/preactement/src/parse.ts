@@ -1,5 +1,11 @@
 import { h, ComponentFactory, Fragment } from 'preact';
-import { CustomElement, getDocument, getAttributeObject } from '@component-elements/shared';
+import {
+  CustomElement,
+  getDocument,
+  getAttributeObject,
+  selfClosingTags,
+  getPropKey,
+} from '@component-elements/shared';
 
 /* -----------------------------------
  *
@@ -48,8 +54,12 @@ function convertToVDom(this: CustomElement, node: Element) {
     return h(Fragment, {}, children());
   }
 
+  if (selfClosingTags.includes(nodeName)) {
+    return h(nodeName, props);
+  }
+
   if (slot) {
-    this.__slots[slot] = getSlotChildren(children());
+    this.__slots[getPropKey(slot)] = getSlotChildren(children());
 
     return null;
   }

@@ -191,7 +191,7 @@ function LoginForm({ successMessage }) {
 }
 ```
 
-Slots values can be either primitive strings, or full HTML structures, as seen above.
+It's important to note that **slot keys will be normalised into camelCase**, for example: `slot="MySlot"` will be access via `mySlot` in your component's props. `preactement` will do it's best to handle all common casing conventions, e.g kebab-case, snake_case and PascalCase. Slot values can be either primitive strings, or full HTML structures, as seen in the example above.
 
 ## Options
 
