@@ -61,7 +61,7 @@ import { define } from 'reactement';
 define('hero-banner', () => import('./heroBanner'));
 ```
 
-As the `heroBanner.ts` file is exporting the component as a key, e.g `export { HeroBanner };`, and this matches the tag name in snake case, e.g `hero-banner`, the component will be correctly rendered.
+As the `heroBanner.ts` file is exporting the component as a key, e.g `export { HeroBanner };`, and this matches the tag name in kebab-case, e.g `hero-banner`, the component will be correctly rendered.
 
 ## On the server (SSR)
 
