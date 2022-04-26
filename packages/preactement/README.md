@@ -1,12 +1,12 @@
 # preactement
 
-> This package supports Preact. If you're using React, go to [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme) for more info.
-
 Sometimes it's useful to let the DOM render our components when needed. Custom Elements are great at this. They provide various methods that can inform you when an element is "connected" or "disconnected" from the DOM.
 
 This package (only **2KB** GZipped) provides the ability to use an HTML custom element as the root for your components. In addition, it allows the use of async code resolution if your custom element isn't immediately used, which is a great strategy for reducing code weight. The exported function can also be used for hydration from SSR in Node.
 
 It's also a great way for you to integrate Preact into other server side frameworks that might render your HTML.
+
+> This package supports Preact. If you're using React, go to [reactement](https://github.com/jahilldev/component-elements/tree/main/packages/reactement#readme) for more info.
 
 # Getting Started
 
