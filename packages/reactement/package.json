@@ -48,6 +48,7 @@
     "build": "webpack --mode=production",
     "watch": "webpack --watch",
     "clean": "rimraf ./dist",
+    "lint": "eslint",
     "test": "jest"
   },
   "bugs": {
