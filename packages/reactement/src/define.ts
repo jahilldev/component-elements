@@ -132,7 +132,7 @@ function onConnected(this: CustomElement) {
 
   let children = this.__children;
 
-  if (!children && !this.hasAttribute('server')) {
+  if (!this.__mounted && !this.hasAttribute('server')) {
     children = createElement(parseHtml.call(this), {});
   }
 
