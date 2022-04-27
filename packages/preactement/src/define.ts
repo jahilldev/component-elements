@@ -27,10 +27,9 @@ function define<P = {}>(
   const { wrapComponent } = options;
   const preRender = typeof window === 'undefined';
   const elementTag = getElementTag(tagName);
-  const customElement = setupElement(child, options);
 
   if (!preRender) {
-    customElements.define(elementTag, customElement);
+    customElements.define(elementTag, setupElement(child, options));
 
     return;
   }
@@ -132,7 +131,7 @@ function onConnected(this: CustomElement) {
   let children = this.__children;
 
   if (!this.__mounted && !this.hasAttribute('server')) {
-    children = h(parseHtml.call(this), {});
+    children = h(parseHtml.call(this), {}); 
   }
 
   this.__properties = { ...this.__slots, ...data, ...attributes };
