@@ -74,7 +74,7 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
       element.__component = component;
       element.__properties = {};
       element.__slots = {};
-      element.__children = [];
+      element.__children = void 0;
       element.__options = options;
 
       return element;
@@ -96,7 +96,7 @@ function setupElement<T>(component: ComponentFunction<T>, options: IOptions = {}
     __component = component;
     __properties = {};
     __slots = {};
-    __children = [];
+    __children = void 0;
     __options = options;
 
     static observedAttributes = ['props', ...attributes];
@@ -129,9 +129,9 @@ function onConnected(this: CustomElement) {
 
   json?.remove();
 
-  let children;
+  let children = this.__children;
 
-  if (!this.hasAttribute('server')) {
+  if (!children && !this.hasAttribute('server')) {
     children = h(parseHtml.call(this), {});
   }
 

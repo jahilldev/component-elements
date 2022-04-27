@@ -42,7 +42,7 @@ interface CustomElement<C = any, I = any> extends HTMLElement {
   __properties?: IProps;
   __slots?: { [index: string]: any };
   __instance?: I;
-  __children?: any[];
+  __children?: any;
   __options: IOptions;
 }
 

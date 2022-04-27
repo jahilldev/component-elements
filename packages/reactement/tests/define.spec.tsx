@@ -283,6 +283,29 @@ describe('define()', () => {
 
       expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em></em>`);
     });
+
+    it('correctly caches children when moved in the DOM', () => {
+      const customTitle = '<em>customTitle</em>';
+      const customText = 'Lorem ipsum dolor';
+      const html = `<div slot="customTitle">${customTitle}</div><p>${customText}</p>`;
+
+      define('message-thirteen', () => Message);
+
+      const element = document.createElement('message-thirteen');
+      const wrapper = document.createElement('main');
+
+      element.innerHTML = html;
+
+      root.appendChild(element);
+
+      element.remove();
+
+      expect(root.innerHTML).toContain('');
+
+      root.appendChild(wrapper.appendChild(element));
+
+      expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em></em><p>${customText}</p>`);
+    });
   });
 
   describe('when run in the browser (no "Reflect.construct")', () => {
