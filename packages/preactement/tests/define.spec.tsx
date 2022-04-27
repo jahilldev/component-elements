@@ -302,7 +302,8 @@ describe('define()', () => {
 
       expect(root.innerHTML).toContain('');
 
-      root.appendChild(wrapper.appendChild(element));
+      root.appendChild(wrapper);
+      wrapper.appendChild(element);
 
       expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em></em><p>${customText}</p>`);
     });
