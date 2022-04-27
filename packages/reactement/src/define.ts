@@ -30,7 +30,7 @@ function define<P = {}>(
   const elementTag = getElementTag(tagName);
 
   if (!preRender) {
-    customElements.define(elementTag, setupElement(child, options););
+    customElements.define(elementTag, setupElement(child, options));
 
     return;
   }
