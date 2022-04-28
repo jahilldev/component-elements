@@ -1,6 +1,6 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
-import { parseHtml } from '../src/parse';
+import { parseChildren } from '../src/parse';
 
 /* -----------------------------------
  *
@@ -20,6 +20,15 @@ const testScript = `<script>alert('danger')</script>`;
  * -------------------------------- */
 
 describe('parse', () => {
+  describe('parseChildren', () => {
+    it('correctly converts an HTML string into a VDom tree', () => {
+      const result = parseChildren.call({ innerHTML: testHtml });
+      const instance = mount(h(result, {}) as any);
+
+      expect(instance.find('h1').text()).toEqual(testHeading);
+    });
+  })
+  /*
   describe('parseHtml()', () => {
     it('should correctly handle misformed html', () => {
       const testText = 'testText';
@@ -77,4 +86,5 @@ describe('parse', () => {
       });
     });
   });
+  */
 });

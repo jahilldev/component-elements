@@ -54,10 +54,8 @@ describe('parse', () => {
   });
 
   describe('parseHtml', () => {
-    it('correctly converts a DOM structure to data', () => {
+    it('correctly converts a DOM structure to multidimensional array', () => {
       const result = parseHtml(testHtml);
-
-      console.log(result);
 
       expect(result).toEqual([null, {}, [
         ['h1', {}, [[null, {}, testHeading]]],
