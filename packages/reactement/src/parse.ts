@@ -1,26 +1,20 @@
 import React, { createElement, ComponentFactory, Fragment } from 'react';
-import {
-  CustomElement,
-  getDocument,
-  getAttributeObject,
-  selfClosingTags,
-  getPropKey
-} from '@component-elements/shared';
+import { CustomElement, parseHtml, selfClosingTags, getPropKey } from '@component-elements/shared';
 
 /* -----------------------------------
  *
- * parseHtml
+ * parseChildren
  *
  * -------------------------------- */
 
-function parseHtml(this: CustomElement): ComponentFactory<{}, any> {
-  const dom = getDocument(this.innerHTML);
+function parseChildren(this: CustomElement): ComponentFactory<{}, any> {
+  const children = parseHtml(this.innerHTML);
 
-  if (!dom) {
+  if (!children.length) {
     return void 0;
   }
 
-  const result = convertToVDom.call(this, dom);
+  const result = convertToVDom.call(this, children);
 
   return () => result;
 }
@@ -31,27 +25,21 @@ function parseHtml(this: CustomElement): ComponentFactory<{}, any> {
  *
  * -------------------------------- */
 
-function convertToVDom(this: CustomElement, node: Element) {
-  if (node.nodeType === 3) {
-    return node.textContent?.trim() || '';
+function convertToVDom(this: CustomElement, [nodeName, {slot, ...props}, children]: any) {
+  if(typeof children === 'string') {
+    return children.trim();
   }
 
-  if (node.nodeType !== 1) {
+  if(nodeName === void 0) {
     return null;
   }
 
-  const nodeName = String(node.nodeName).toLowerCase();
-  const childNodes = Array.from(node.childNodes);
+  const childNodes = () => children.map((child) =>
+    child.length ? convertToVDom.call(this, child) : void 0
+  );
 
-  const children = () => childNodes.map((child) => convertToVDom.call(this, child));
-  const { slot, ...props } = getAttributeObject(node.attributes);
-
-  if (nodeName === 'script') {
-    return null;
-  }
-
-  if (nodeName === 'body') {
-    return createElement(Fragment, {}, children());
+  if (nodeName === null) {
+    return createElement(Fragment, {}, childNodes());
   }
 
   if (selfClosingTags.includes(nodeName)) {
@@ -59,12 +47,12 @@ function convertToVDom(this: CustomElement, node: Element) {
   }
 
   if (slot) {
-    this.__slots[getPropKey(slot)] = getSlotChildren(children());
+    this.__slots[getPropKey(slot)] = getSlotChildren(childNodes());
 
     return null;
   }
 
-  return createElement(nodeName, { ...props, key: Math.random() }, children());
+  return createElement(nodeName, props, childNodes());
 }
 
 /* -----------------------------------
@@ -89,4 +77,4 @@ function getSlotChildren(children: JSX.Element[]) {
  *
  * -------------------------------- */
 
-export { parseHtml };
+export { parseChildren };
