@@ -36,7 +36,7 @@ function convertToVDom(this: CustomElement, [nodeName, {slot, ...props}, childre
 
   const childNodes = () => children.map((child) => convertToVDom.call(this, child));
 
-  if (nodeName === 'body') {
+  if (nodeName === null) {
     return h(Fragment, {}, childNodes());
   }
 
