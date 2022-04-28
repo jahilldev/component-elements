@@ -1,4 +1,4 @@
-import { IProps, CustomElement, ErrorTypes } from './model';
+import { IProps, CustomElement, ErrorTypes, selfClosingTags } from './model';
 
 /* -----------------------------------
  *
@@ -27,6 +27,22 @@ function parseJson(this: CustomElement, value: string) {
 
 /* -----------------------------------
  *
+ * parseHtml
+ *
+ * -------------------------------- */
+
+function parseHtml(htmlString: string) {
+  const dom = getDocument(htmlString);
+
+  if (!dom) {
+    return void 0;
+  }
+
+  return domToArray(dom);
+}
+
+/* -----------------------------------
+ *
  * getDocument
  *
  * -------------------------------- */
@@ -47,6 +63,42 @@ function getDocument(html: string) {
   }
 
   return nodes.body;
+}
+
+/* -----------------------------------
+ *
+ * domToArray
+ *
+ * -------------------------------- */
+
+function domToArray(node: Element) {
+  if(node.nodeType === 3) {
+    return [null, {}, node.textContent?.trim() || ''];
+  }
+
+  if (node.nodeType !== 1) {
+    return [];
+  }
+
+  const nodeName = String(node.nodeName).toLowerCase();
+  const childNodes = Array.from(node.childNodes);
+
+  const children = () => childNodes.map((child: Element) => domToArray(child));
+  const props = getAttributeObject(node.attributes);
+
+  if (nodeName === 'script') {
+    return [];
+  }
+
+  if (nodeName === 'body') {
+    return [null, {}, children()];
+  }
+
+  if (selfClosingTags.includes(nodeName)) {
+    return [nodeName, props, []];
+  }
+
+  return [nodeName, props, children()];
 }
 
 /* -----------------------------------
@@ -114,4 +166,4 @@ function getPropKey(value: string) {
  *
  * -------------------------------- */
 
-export { parseJson, getDocument, getPropKey, getAttributeObject, getAttributeProps };
+export { parseJson, parseHtml, getDocument, getPropKey, getAttributeObject, getAttributeProps };
