@@ -11,7 +11,7 @@ import {
   getElementAttributes,
   getAsyncComponent,
 } from '@component-elements/shared';
-import { parseHtml } from './parse';
+import { parseChildren } from './parse';
 import { IOptions, ComponentFunction } from './model';
 
 /* -----------------------------------
@@ -132,7 +132,7 @@ function onConnected(this: CustomElement) {
   let children = this.__children;
 
   if (!this.__mounted && !this.hasAttribute('server')) {
-    children = createElement(parseHtml.call(this), {});
+    children = createElement(parseChildren.call(this), {});
   }
 
   this.__properties = { ...this.__slots, ...data, ...attributes };

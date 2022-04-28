@@ -1,6 +1,7 @@
 import { h } from 'preact';
 import { mount } from 'enzyme';
 import { parseChildren } from '../src/parse';
+import { parseHtml } from '@component-elements/shared';
 
 /* -----------------------------------
  *
@@ -27,26 +28,24 @@ describe('parse', () => {
 
       expect(instance.find('h1').text()).toEqual(testHeading);
     });
-  })
-  /*
-  describe('parseHtml()', () => {
+
     it('should correctly handle misformed html', () => {
       const testText = 'testText';
-      const result = parseHtml.call({ innerHTML: `<h1>${testText}` });
+      const result = parseChildren.call({ innerHTML: `<h1>${testText}` });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.html()).toEqual(`<h1>${testText}</h1>`);
     });
 
     it('handles text values witin custom element', () => {
-      const result = parseHtml.call({ innerHTML: testHeading });
+      const result = parseChildren.call({ innerHTML: testHeading });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual(testHeading);
     });
 
     it('handles whitespace within custom element', () => {
-      const result = parseHtml.call({ innerHTML: testWhitespace });
+      const result = parseChildren.call({ innerHTML: testWhitespace });
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual('');
@@ -54,17 +53,13 @@ describe('parse', () => {
     });
 
     it('removes script blocks for security', () => {
-      const result = parseHtml.call({ innerHTML: testScript });
+      const result = parseChildren.call({ innerHTML: testScript });
+
+      console.log(parseHtml(testScript));
+
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual('');
-    });
-
-    it('correctly converts an HTML string into a VDom tree', () => {
-      const result = parseHtml.call({ innerHTML: testHtml });
-      const instance = mount(h(result, {}) as any);
-
-      expect(instance.find('h1').text()).toEqual(testHeading);
     });
 
     describe('slots', () => {
@@ -78,7 +73,7 @@ describe('parse', () => {
         const headingHtml = `<h1>${testHeading}</h1>`;
         const testHtml = `<section>${headingHtml}${slotHtml}</section>`;
   
-        const result = parseHtml.call({ innerHTML: testHtml, __slots: slots });
+        const result = parseChildren.call({ innerHTML: testHtml, __slots: slots });
         const instance = mount(h(result, {}) as any);
   
         expect(instance.html()).toEqual(`<section>${headingHtml}</section>`);
@@ -86,5 +81,4 @@ describe('parse', () => {
       });
     });
   });
-  */
 });

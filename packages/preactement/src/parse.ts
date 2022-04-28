@@ -30,11 +30,13 @@ function convertToVDom(this: CustomElement, [nodeName, {slot, ...props}, childre
     return children.trim();
   }
 
-  if(nodeName === 'script') {
+  if(nodeName === void 0) {
     return null;
   }
 
-  const childNodes = () => children.map((child) => convertToVDom.call(this, child));
+  const childNodes = () => children.map((child) =>
+    child.length ? convertToVDom.call(this, child) : void 0
+  );
 
   if (nodeName === null) {
     return h(Fragment, {}, childNodes());

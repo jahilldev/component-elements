@@ -76,12 +76,12 @@ function domToArray(node: Element) {
     return [null, {}, node.textContent?.trim() || ''];
   }
 
-  if (node.nodeType !== 1) {
-    return [];
-  }
-
   const nodeName = String(node.nodeName).toLowerCase();
   const childNodes = Array.from(node.childNodes);
+
+  if (nodeName === 'script' || node.nodeType !== 1) {
+    return [];
+  }
 
   const children = () => childNodes.map((child: Element) => domToArray(child));
   const props = getAttributeObject(node.attributes);
