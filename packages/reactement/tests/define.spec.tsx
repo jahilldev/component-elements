@@ -47,6 +47,7 @@ function Message({ customTitle, value, children }: IProps) {
  * -------------------------------- */
 
 describe('define()', () => {
+  const { document } = globalThis;
   const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
   describe('when run in the browser', () => {
@@ -310,11 +311,11 @@ describe('define()', () => {
   });
 
   describe('when run in the browser (no "Reflect.construct")', () => {
-    const { Reflect } = global;
+    const { document, Reflect } = globalThis;
     let root;
 
     beforeAll(() => {
-      delete global.Reflect;
+      delete (globalThis as any).Reflect;
     });
 
     beforeEach(() => {
@@ -327,7 +328,7 @@ describe('define()', () => {
     });
 
     afterAll(() => {
-      global.Reflect = Reflect;
+      globalThis.Reflect = Reflect;
     });
 
     it('renders component correctly', () => {
@@ -354,14 +355,14 @@ describe('define()', () => {
   });
 
   describe('when run on the server', () => {
-    const { window } = global;
+    const { window } = globalThis;
 
     beforeAll(() => {
-      delete global.window;
+      delete (globalThis as any).window;
     });
 
     afterAll(() => {
-      global.window = window;
+      globalThis.window = window;
     });
 
     it('returns the correct markup', () => {
@@ -371,7 +372,7 @@ describe('define()', () => {
       const instance = shallow(createElement(component, props));
 
       expect(instance.find('message-one').length).toEqual(1);
-      // expect(instance.find('em').text()).toEqual(props.value);
+      expect(instance.find('message-one').prop('server')).toEqual(true);
     });
 
     it('throws an error when used with a promise', () => {
