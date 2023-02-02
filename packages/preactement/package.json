@@ -55,7 +55,7 @@
     "url": "https://github.com/jahilldev/component-elements/issues"
   },
   "peerDependencies": {
-    "preact": ">=10"
+    "preact": "10.x"
   },
   "devDependencies": {
     "@component-elements/shared": "1.0.0",
