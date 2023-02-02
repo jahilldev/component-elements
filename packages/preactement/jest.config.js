@@ -1,3 +1,5 @@
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+
 /* -----------------------------------
  *
  * Jest
@@ -22,7 +24,8 @@ module.exports = {
     },
   },
   transform: {
-    '^.+\\.tsx?$': 'ts-jest',
     '^.+\\js$': 'babel-jest',
+    '^.+\\.tsx?$': 'ts-jest',
   },
+  transformIgnorePatterns: ['<rootDir>/node_modules/*'],
 };

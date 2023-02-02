@@ -41,13 +41,14 @@ function define<P = {}>(
   }
 
   let component = content;
+  const attributes: Record<string, any> = { server: true };
 
   if (wrapComponent) {
     component = wrapComponent(content);
   }
 
   return (props: P) =>
-    h(elementTag, { server: true }, [
+    h(elementTag, attributes, [
       h('script', {
         type: 'application/json',
         dangerouslySetInnerHTML: { __html: JSON.stringify(props) },
