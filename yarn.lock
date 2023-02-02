@@ -2347,7 +2347,7 @@
   dependencies:
     "@types/node" "*"
 
-"@types/enzyme@^3.10.11", "@types/enzyme@^3.10.12":
+"@types/enzyme@^3.10.12":
   version "3.10.12"
   resolved "https://registry.npmjs.org/@types/enzyme/-/enzyme-3.10.12.tgz"
   integrity sha512-xryQlOEIe1TduDWAOphR0ihfebKFSWOXpIsk+70JskCfRfW+xALdnJ0r1ZOTo85F9Qsjk6vtlU7edTYHbls9tA==
@@ -4042,9 +4042,9 @@ enzyme-adapter-preact-pure@^4.1.0:
   resolved "https://registry.npmjs.org/enzyme-adapter-preact-pure/-/enzyme-adapter-preact-pure-4.1.0.tgz"
   integrity sha512-SifzvBGf1qUEs0FfCAOiKgDppb1wg/R+rmX8D7jFVpQ/Q2L3/xuyc1V575zoi8QAhIBDUB/8QUWvI4KZc50trw==
 
-enzyme-adapter-react-16@^1.15.6:
+enzyme-adapter-react-16@^1.15.7:
   version "1.15.7"
-  resolved "https://registry.npmjs.org/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.15.7.tgz"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.15.7.tgz#a737e6d8e2c147e9da5acf957755be7634f76201"
   integrity sha512-LtjKgvlTc/H7adyQcj+aq0P0H07LDL480WQl1gU512IUyaDo/sbOaNDdZsJXYW2XaoPqrLLE9KbZS+X2z6BASw==
   dependencies:
     enzyme-adapter-utils "^1.14.1"

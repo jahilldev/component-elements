@@ -11,6 +11,9 @@
     "lint": "lerna run lint",
     "test": "lerna run test"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "workspaces": {
     "packages": [
       "packages/*"
