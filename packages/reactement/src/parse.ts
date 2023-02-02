@@ -4,7 +4,7 @@ import {
   getDocument,
   getAttributeObject,
   selfClosingTags,
-  getPropKey
+  getPropKey,
 } from '@component-elements/shared';
 
 /* -----------------------------------
@@ -44,14 +44,15 @@ function convertToVDom(this: CustomElement, node: Element) {
   const childNodes = Array.from(node.childNodes);
 
   const children = () => childNodes.map((child) => convertToVDom.call(this, child));
-  const { slot, ...props } = getAttributeObject(node.attributes);
+  const { slot, ...attributes } = getAttributeObject(node.attributes);
+  const props = { ...attributes, key: Math.random() };
 
   if (nodeName === 'script') {
     return null;
   }
 
   if (nodeName === 'body') {
-    return createElement(Fragment, {}, children());
+    return createElement(Fragment, { key: 'body' }, children());
   }
 
   if (selfClosingTags.includes(nodeName)) {
@@ -64,7 +65,7 @@ function convertToVDom(this: CustomElement, node: Element) {
     return null;
   }
 
-  return createElement(nodeName, { ...props, key: Math.random() }, children());
+  return createElement(nodeName, props, children());
 }
 
 /* -----------------------------------
