@@ -59,9 +59,9 @@
   },
   "devDependencies": {
     "@component-elements/shared": "1.0.0",
-    "@types/enzyme": "^3.10.11",
+    "@types/enzyme": "^3.10.12",
     "enzyme": "^3.11.0",
-    "enzyme-adapter-preact-pure": "^3.3.0",
-    "preact": "^10.6.6"
+    "enzyme-adapter-preact-pure": "^4.1.0",
+    "preact": "^10.11.3"
   }
 }

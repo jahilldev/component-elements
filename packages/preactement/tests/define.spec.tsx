@@ -371,6 +371,7 @@ describe('define()', () => {
       const instance = mount(h(component, props) as any);
 
       expect(instance.find('message-one').length).toEqual(1);
+      expect(instance.find('message-one').prop('server')).toEqual(true);
       expect(instance.find('em').text()).toEqual(props.value);
     });
 
