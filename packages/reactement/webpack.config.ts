@@ -23,7 +23,12 @@ const defaultConfig = {
   entry: {
     define: path.join(__dirname, './src/define.ts'),
   },
-  externals: [nodeExternals({ allowlist: ['@component-elements/shared'] })],
+  externals: [
+    nodeExternals({
+      allowlist: ['@component-elements/shared'],
+      modulesDir: path.resolve(__dirname, '../../node_modules'),
+    }),
+  ],
   context: path.join(__dirname, './src'),
   output: {
     path: path.join(__dirname, './dist'),
