@@ -65,7 +65,7 @@ jobs:
         id: check
         with:
           file-name: ./packages/${{ matrix.package }}/package.json
-          file-url: https://cdn.jsdelivr.net/npm/@minimal-analytics/${{ matrix.package }}@latest/package.json
+          file-url: https://cdn.jsdelivr.net/npm/${{ matrix.package }}@latest/package.json
           static-checking: localIsNew
 
       - name: Version update detected
