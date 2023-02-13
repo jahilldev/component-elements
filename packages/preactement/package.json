@@ -6,6 +6,9 @@
   "license": "MIT",
   "main": "./dist/define.es5.js",
   "types": "./dist/define.d.ts",
+  "engines": {
+    "node": ">=10"
+  },
   "exports": {
     ".": "./dist/define.js",
     "./es5": {
