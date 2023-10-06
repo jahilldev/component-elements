@@ -9,6 +9,7 @@ import { parseHtml } from '../src/parse';
  * -------------------------------- */
 
 const testHeading = 'testHeading';
+const testWhitespace = '    ';
 const testHtml = `<h1>${testHeading}</h1><br /><section><h2 title="Main Title">Hello</h2></section>`;
 const testScript = `<script>alert('danger')</script>`;
 
@@ -33,6 +34,14 @@ describe('parse', () => {
       const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual(testHeading);
+    });
+
+    it('retains whitespace within custom element', () => {
+      const result = parseHtml.call({ innerHTML: testWhitespace });
+		const instance = mount(h(result, {}) as any);
+
+      expect(instance.text()).toEqual(testWhitespace);
+      expect(instance.html()).toEqual(testWhitespace);
     });
 
     it('removes script blocks for security', () => {
