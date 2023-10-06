@@ -38,7 +38,7 @@ describe('parse', () => {
 
     it('retains whitespace within custom element', () => {
       const result = parseHtml.call({ innerHTML: testWhitespace });
-		const instance = mount(h(result, {}) as any);
+      const instance = mount(h(result, {}) as any);
 
       expect(instance.text()).toEqual(testWhitespace);
       expect(instance.html()).toEqual(testWhitespace);
