@@ -308,6 +308,27 @@ describe('define()', () => {
 
       expect(root.innerHTML).toContain(`<h2>${customTitle}</h2><em></em><p>${customText}</p>`);
     });
+
+    it('hydrates server rendered markup corretly without re-rendering child elements', () => {
+      const customTitle = 'customTitle';
+      const props = { value: 'attrProps' };
+      const json = `<script type="application/json">${JSON.stringify(props)}</script>`;
+      const html = `<h2>${customTitle}</h2><em>${props.value}</em>`;
+
+      define('message-fourteen', () => Message, { attributes: ['custom-title'] });
+
+      const element = document.createElement('message-fourteen');
+
+      element.setAttribute('custom-title', customTitle);
+      element.setAttribute('server', '');
+      element.innerHTML = json + html;
+      const originalH2 = element.querySelector('h2');
+
+      root.appendChild(element);
+
+      expect(element.innerHTML).toEqual(html);
+      expect(element.querySelector('h2')).toBe(originalH2);
+    });
   });
 
   describe('when run in the browser (no "Reflect.construct")', () => {
