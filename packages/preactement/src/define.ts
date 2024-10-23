@@ -139,7 +139,6 @@ function onConnected(this: CustomElement) {
   this.__children = children || [];
 
   this.removeAttribute('server');
-  //this.innerHTML = '';
 
   const response = this.__component();
   const renderer = (result: ComponentFactory) => finaliseComponent.call(this, result);
